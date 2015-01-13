@@ -1,0 +1,16 @@
+[
+{
+  "modid": "tcnodetracker",
+  "name": "TC Node Tracker",
+  "description": "Tracks scanned nodes for Thaumcraft",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Dyonovan"],
+  "credits": "Azanor",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
