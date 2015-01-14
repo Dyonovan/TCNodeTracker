@@ -1,13 +1,10 @@
 package com.dyonovan.tcnodetracker.events;
 
 import com.dyonovan.tcnodetracker.TCNodeTracker;
-import com.dyonovan.tcnodetracker.lib.JsonUtils;
 import com.dyonovan.tcnodetracker.lib.NodeList;
-import com.google.gson.Gson;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -24,7 +21,8 @@ public class RightClickEvent {
     public void playerRightClick(PlayerInteractEvent event) {
 
         if (event.isCanceled() || !event.world.isRemote ||
-                event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+                event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK ||
+                event.entityPlayer.inventory.getCurrentItem() == null) {
             return;
         }
 
@@ -33,27 +31,28 @@ public class RightClickEvent {
             return;
         }
 
-        TileEntity i$ = event.entityPlayer.worldObj.getTileEntity(event.x, event.y, event.z);
+        TileEntity i = event.entityPlayer.worldObj.getTileEntity(event.x, event.y, event.z);
 
-        if (i$ instanceof INode) {
+        if (i instanceof INode) {
 
-            AspectList aspectList = ((INode) i$).getAspects();
+            AspectList aspectList = ((INode) i).getAspects();
+            if (aspectList.size() == 0) return;
             HashMap hm = new HashMap();
 
             for (Map.Entry<Aspect, Integer> entry : aspectList.aspects.entrySet()) {
                 hm.put(entry.getKey().getTag(), entry.getValue());
             }
 
-
             //TODO add node type (Normal, Bright, etc)
-            NodeList nodeList = new NodeList(hm, null, null, event.x, event.y, event.z);
 
-            TCNodeTracker.nodelist.add(nodeList);
-
-            Gson gson = new Gson();
-            String json = gson.toJson(nodeList);
-            event.entityPlayer.addChatComponentMessage(new ChatComponentText(json));
-
+            for (NodeList n : TCNodeTracker.nodelist) {
+                if (event.x == n.x && event.y == n.y && event.z == n.z) {
+                    n.aspect = hm;
+                    return;
+                }
+            }
+            TCNodeTracker.nodelist.add(new NodeList(hm, null, null, event.x, event.y, event.z));
+            //event.entityPlayer.addChatComponentMessage(new ChatComponentText(json));
         }
     }
 }

@@ -1,7 +1,9 @@
 package com.dyonovan.tcnodetracker;
 
+import com.dyonovan.tcnodetracker.bindings.KeyBindings;
 import com.dyonovan.tcnodetracker.events.ClientTick;
-import com.dyonovan.tcnodetracker.events.Connections;
+import com.dyonovan.tcnodetracker.events.ClientConnectionEvent;
+import com.dyonovan.tcnodetracker.events.KeyInputEvent;
 import com.dyonovan.tcnodetracker.events.RightClickEvent;
 import com.dyonovan.tcnodetracker.lib.Constants;
 import com.dyonovan.tcnodetracker.lib.NodeList;
@@ -34,13 +36,16 @@ public class TCNodeTracker {
     public void preInit(FMLPreInitializationEvent event) {
 
         MinecraftForge.EVENT_BUS.register(new RightClickEvent());
-        FMLCommonHandler.instance().bus().register(new Connections());
+        FMLCommonHandler.instance().bus().register(new ClientConnectionEvent());
         FMLCommonHandler.instance().bus().register(new ClientTick());
+        FMLCommonHandler.instance().bus().register(new KeyInputEvent());
 
     }
 
+    @SideOnly(Side.CLIENT)
     @EventHandler
     public void init(FMLInitializationEvent event) {
+        KeyBindings.init();
     }
 
     @EventHandler

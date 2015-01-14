@@ -11,7 +11,7 @@ import net.minecraft.server.integrated.IntegratedServer;
 import java.io.File;
 import java.net.InetSocketAddress;
 
-public class Connections {
+public class ClientConnectionEvent {
 
     @SubscribeEvent
     public void onConnected(FMLNetworkEvent.ClientConnectedToServerEvent event) {
