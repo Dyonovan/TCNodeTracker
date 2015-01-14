@@ -1,5 +1,7 @@
 package com.dyonovan.tcnodetracker.events;
 
+import com.dyonovan.tcnodetracker.TCNodeTracker;
+import com.dyonovan.tcnodetracker.lib.JsonUtils;
 import com.dyonovan.tcnodetracker.lib.NodeList;
 import com.google.gson.Gson;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -21,8 +23,6 @@ public class RightClickEvent {
     @SubscribeEvent
     public void playerRightClick(PlayerInteractEvent event) {
 
-        //if (event.isCanceled() || !event.world.isRemote ||
-                //event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
         if (event.isCanceled() || !event.world.isRemote ||
                 event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             return;
@@ -46,11 +46,14 @@ public class RightClickEvent {
 
 
             //TODO add node type (Normal, Bright, etc)
-            NodeList nodeList = new NodeList(hm, null, event.x, event.y, event.z);
+            NodeList nodeList = new NodeList(hm, null, null, event.x, event.y, event.z);
+
+            TCNodeTracker.nodelist.add(nodeList);
 
             Gson gson = new Gson();
             String json = gson.toJson(nodeList);
             event.entityPlayer.addChatComponentMessage(new ChatComponentText(json));
+
         }
     }
 }
