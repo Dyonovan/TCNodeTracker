@@ -5,10 +5,10 @@ import java.util.HashMap;
 public class NodeList {
 
     public HashMap aspect;
-    public String type, dim;
-    public int x, y, z;
+    public String type;
+    public int dim, x, y, z;
 
-    public NodeList(HashMap aspect, String dim, String type, int x, int y, int z) {
+    public NodeList(HashMap aspect, int dim, String type, int x, int y, int z) {
 
         this.aspect = aspect;
         this.dim = dim;

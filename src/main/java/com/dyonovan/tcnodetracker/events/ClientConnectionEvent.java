@@ -43,10 +43,4 @@ public class ClientConnectionEvent {
 
     }
 
-    @SubscribeEvent
-    public void onDisconnected(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-
-        JsonUtils.writeJson();
-
-    }
 }

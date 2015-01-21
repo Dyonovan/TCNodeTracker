@@ -1,6 +1,7 @@
 package com.dyonovan.tcnodetracker.events;
 
 import com.dyonovan.tcnodetracker.TCNodeTracker;
+import com.dyonovan.tcnodetracker.lib.JsonUtils;
 import com.dyonovan.tcnodetracker.lib.NodeList;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.item.ItemStack;
@@ -20,7 +21,7 @@ public class RightClickEvent {
     @SubscribeEvent
     public void playerRightClick(PlayerInteractEvent event) {
 
-        if (event.isCanceled() || !event.world.isRemote ||
+        if (event.isCanceled() || !event.entityPlayer.worldObj.isRemote ||
                 event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK ||
                 event.entityPlayer.inventory.getCurrentItem() == null) {
             return;
@@ -38,21 +39,27 @@ public class RightClickEvent {
             AspectList aspectList = ((INode) i).getAspects();
             if (aspectList.size() == 0) return;
             HashMap hm = new HashMap();
+            //JsonUtils.readJson();
+            int dim = event.entityPlayer.worldObj.provider.dimensionId;
 
             for (Map.Entry<Aspect, Integer> entry : aspectList.aspects.entrySet()) {
                 hm.put(entry.getKey().getTag(), entry.getValue());
             }
 
-            //TODO add node type (Normal, Bright, etc)
-
-            for (NodeList n : TCNodeTracker.nodelist) {
-                if (event.x == n.x && event.y == n.y && event.z == n.z) {
-                    n.aspect = hm;
-                    return;
+            if (TCNodeTracker.nodelist.size() != 0 || TCNodeTracker.nodelist != null) {
+                for (NodeList n : TCNodeTracker.nodelist) {
+                    if (event.x == n.x && event.y == n.y && event.z == n.z && dim == n.dim) {
+                        n.aspect = hm;
+                        JsonUtils.writeJson();
+                        return;
+                    }
                 }
             }
-            TCNodeTracker.nodelist.add(new NodeList(hm, null, null, event.x, event.y, event.z));
-            //event.entityPlayer.addChatComponentMessage(new ChatComponentText(json));
+            //TODO add node type (Normal, Bright, etc)
+
+            TCNodeTracker.nodelist.add(new NodeList(hm, dim, null, event.x, event.y, event.z));
+            JsonUtils.writeJson();
+
         }
     }
 }
