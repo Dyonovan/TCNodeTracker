@@ -20,7 +20,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 
-@Mod(name = Constants.MODNAME, modid = Constants.MODID, version = Constants.VERSION, dependencies = Constants.DEPENDENCIES,
+@Mod(name = Constants.MODNAME, modid = Constants.MODID, version = "@VERSION@", dependencies = Constants.DEPENDENCIES,
         acceptableRemoteVersions = "*")
 
 public class TCNodeTracker {

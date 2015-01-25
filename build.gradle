@@ -17,12 +17,24 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "0.1"
+ext.configFile = file "build.properties"
+
+configFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
+
+version = "${config.minecraft_version}-${config.mod_version}"
 group= "com.dyonovan.tcnodetracker" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "TCNodeTracker"
+archivesBaseName = "tcnodetracker"
 
 minecraft {
-    version = "1.7.10-10.13.2.1236"
+    version = config.minecraft_version + "-" + config.forge_version
+
+    replaceIn "BeyondRealityCore.java"
+    replace "@VERSION@", "${config.mod_version}"
+
     runDir = "eclipse"
 }
 
