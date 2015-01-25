@@ -18,11 +18,7 @@ import java.util.Comparator;
 public class GuiMain extends GuiScreen {
 
     private static final ResourceLocation nodes = new ResourceLocation("tcnodetracker:textures/gui/nodes.png");
-    private static final ResourceLocation nodesSmall = new ResourceLocation("tcnodetracker:textures/gui/nodes_small.png");
-    private static final ResourceLocation list = new ResourceLocation("tcnodetracker:textures/gui/list.png");
-    public static ArrayList<AspectLoc> aspectList = new ArrayList<>();
-
-    private final int WHITE = 0xFFFFFF;
+    public static ArrayList<AspectLoc> aspectList = new ArrayList<AspectLoc>();
 
     public GuiMain() {
     }
@@ -39,24 +35,10 @@ public class GuiMain extends GuiScreen {
     public void drawDefaultBackground() {
         super.drawDefaultBackground();
 
-        int i = 50;
-
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(nodes);
         this.drawTexturedModalRect((this.width - 204) / 2, 1, 0, 0, 204, 35);
-        this.mc.getTextureManager().bindTexture(list);
-        //Header Sides
-        this.drawTexturedModalRect(0, i, 0, 0, 10, 10);
-        this.drawTexturedModalRect(0, i + 10, 0, 167, 10, 10);
-        this.drawTexturedModalRect(this.width - 10, i, 238, 0, 10, 10);
-        this.drawTexturedModalRect(this.width - 10, i + 10, 238, 167, 10, 10);
-        //Header middle
-        for (int x = 0; x < (this.width - 20); x++) {
-            this.drawTexturedModalRect(x + 10, i, 10, 0, 1, 10);
-            this.drawTexturedModalRect(x + 10, i + 10, 10, 167, 1, 10);
-        }
-        this.mc.getTextureManager().bindTexture(nodesSmall);
-        this.drawTexturedModalRect(165, 52, 0, 0, 82, 16);
+
     }
 
     public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
@@ -64,13 +46,22 @@ public class GuiMain extends GuiScreen {
 
         if (button >= 0) {
             if (mouseX >= w + 2 && mouseX <= w + 32 && mouseY >= 3 && mouseY <= 35) {
-            sortNodes("aer");
+                sortNodes(Constants.AIR);
+            } else if (mouseX >= w + 35 && mouseX <= w + 66 && mouseY >= 3 && mouseY <= 35) {
+                sortNodes(Constants.WATER);
+            } else if (mouseX >= w + 70 && mouseX <= w + 101 && mouseY >= 3 && mouseY <= 35) {
+                sortNodes(Constants.FIRE);
+            } else if (mouseX >= w + 104 && mouseX <= w + 135 && mouseY >= 3 && mouseY <= 35) {
+                sortNodes(Constants.ORDER);
+            } else if (mouseX >= w + 139 && mouseX <= w + 170 && mouseY >= 3 && mouseY <= 35) {
+                sortNodes(Constants.ENTROPY);
+            } else if (mouseX >= w + 172 && mouseX <= w + 203 && mouseY >= 3 && mouseY <= 35) {
+                sortNodes(Constants.EARTH);
+            }
+        }
+
+
     }
-}
-
-
-
-}
 
     private void sortNodes(String aspect) {
 
@@ -80,12 +71,12 @@ public class GuiMain extends GuiScreen {
             if (n.aspect.containsKey(aspect)) {
 
                 aspectList.add(new AspectLoc(n.x, n.y, n.z, (int) Math.round(mc.thePlayer.getDistance(n.x, n.y, n.z)),
-                        n.aspect.containsKey(Constants.AIR) ? (double) n.aspect.get(Constants.AIR) : 0,
-                        n.aspect.containsKey(Constants.WATER) ? (double) n.aspect.get(Constants.WATER) : 0,
-                        n.aspect.containsKey(Constants.FIRE) ? (double) n.aspect.get(Constants.FIRE) : 0,
-                        n.aspect.containsKey(Constants.ORDER) ? (double) n.aspect.get(Constants.ORDER) : 0,
-                        n.aspect.containsKey(Constants.ENTROPY) ? (double) n.aspect.get(Constants.ENTROPY) : 0,
-                        n.aspect.containsKey(Constants.EARTH) ? (double) n.aspect.get(Constants.EARTH) : 0));
+                        n.aspect.containsKey(Constants.AIR) ? n.aspect.get(Constants.AIR) : 0,
+                        n.aspect.containsKey(Constants.WATER) ? n.aspect.get(Constants.WATER) : 0,
+                        n.aspect.containsKey(Constants.FIRE) ? n.aspect.get(Constants.FIRE) : 0,
+                        n.aspect.containsKey(Constants.ORDER) ? n.aspect.get(Constants.ORDER) : 0,
+                        n.aspect.containsKey(Constants.ENTROPY) ? n.aspect.get(Constants.ENTROPY) : 0,
+                        n.aspect.containsKey(Constants.EARTH) ? n.aspect.get(Constants.EARTH) : 0));
             }
         }
         Collections.sort(aspectList, new Comparator<AspectLoc>() {
@@ -99,44 +90,57 @@ public class GuiMain extends GuiScreen {
 
     public void drawScreen(int x, int y, float f) {
 
-        int k = 20;
-        int l = 80;
+        int k = 25;
+        int l = 86;
 
 
         drawDefaultBackground();
 
         String s1 = "Click aspect to get node list";
 
-        this.fontRendererObj.drawString(s1, this.width / 2 - this.fontRendererObj.getStringWidth(s1) / 2, 40, WHITE);
-        this.fontRendererObj.drawString("Distance", 5, 57, WHITE);
-        this.fontRendererObj.drawString("X", k + 43, 57, WHITE);
-        this.fontRendererObj.drawString("Y", k + 83, 57, WHITE);
-        this.fontRendererObj.drawString("Z", k + 123, 57, WHITE);
+        this.fontRendererObj.drawString(s1, this.width / 2 - this.fontRendererObj.getStringWidth(s1) / 2, 40, Constants.WHITE);
+        drawRect(0, 50, this.width, 52, -9408400);
+        drawRect(0, 64, this.width, 66, -9408400);
+        GL11.glScalef(.8F, .8F, .8F);
+        this.fontRendererObj.drawString("Distance", 5, 69, Constants.WHITE);
+        this.fontRendererObj.drawString("X", 62, 69, Constants.WHITE);
+        this.fontRendererObj.drawString("Y", 102, 69, Constants.WHITE);
+        this.fontRendererObj.drawString("Z", 142, 69, Constants.WHITE);
+        s1 = "Aer  Aqua  Ignis  Ordo  Perditio  Terra";
+        this.fontRendererObj.drawString(s1, 173, 69, Constants.WHITE);
 
-        for (AspectLoc a : this.aspectList) {
-            this.fontRendererObj.drawString(Integer.toString(a.distance), k, l, WHITE );
-            this.fontRendererObj.drawString(Integer.toString(a.x), k + 40, l, WHITE );
-            this.fontRendererObj.drawString(Integer.toString(a.y), k + 80, l, WHITE );
-            this.fontRendererObj.drawString(Integer.toString(a.z), k + 120, l, WHITE );
-            String s2 = Integer.toString((int) Math.round(a.hasAer));
-            this.fontRendererObj.drawString(s2, k + 156 - (this.fontRendererObj.getStringWidth(s2) / 2), l, WHITE);
-            s2 = Integer.toString((int) Math.round(a.hasAqua));
-            this.fontRendererObj.drawString(s2, k + 176 - (this.fontRendererObj.getStringWidth(s2) / 2), l, WHITE);
-            s2 = Integer.toString((int) Math.round(a.hasIgnis));
-            this.fontRendererObj.drawString(s2, k + 196 - (this.fontRendererObj.getStringWidth(s2) / 2), l, WHITE);
-            s2 = Integer.toString((int) Math.round(a.hasOrdo));
-            this.fontRendererObj.drawString(s2, k + 216 - (this.fontRendererObj.getStringWidth(s2) / 2), l, WHITE);
-            s2 = Integer.toString((int) Math.round(a.hasPerdito));
-            this.fontRendererObj.drawString(s2, k + 236 - (this.fontRendererObj.getStringWidth(s2) / 2), l, WHITE);
-            s2 = Integer.toString((int) Math.round(a.hasTerra));
-            this.fontRendererObj.drawString(s2, k + 256 - (this.fontRendererObj.getStringWidth(s2) / 2), l, WHITE);
-            l += 8;
+
+        for (AspectLoc a : aspectList) {
+            String s2 = Integer.toString(a.distance);
+            this.fontRendererObj.drawString(s2, k - (this.fontRendererObj.getStringWidth(s2) / 2), l, Constants.WHITE);
+            s2 = Integer.toString(a.x);
+            this.fontRendererObj.drawString(s2, k + 40 - (this.fontRendererObj.getStringWidth(s2) / 2), l, Constants.WHITE);
+            s2 = Integer.toString(a.y);
+            this.fontRendererObj.drawString(s2, k + 80 - (this.fontRendererObj.getStringWidth(s2) / 2), l, Constants.WHITE);
+            s2 = Integer.toString(a.z);
+            this.fontRendererObj.drawString(s2, k + 120 - (this.fontRendererObj.getStringWidth(s2) / 2), l, Constants.WHITE);
+            s2 = a.hasAer > 0 ? Integer.toString(a.hasAer) : "";
+            this.fontRendererObj.drawString(s2, k + 156 - (this.fontRendererObj.getStringWidth(s2) / 2), l, Constants.WHITE);
+            s2 = a.hasAqua > 0 ? Integer.toString(a.hasAqua) : "";
+            this.fontRendererObj.drawString(s2, k + 187 - (this.fontRendererObj.getStringWidth(s2) / 2), l, Constants.WHITE);
+            s2 = a.hasIgnis > 0 ? Integer.toString(a.hasIgnis) : "";
+            this.fontRendererObj.drawString(s2, k + 217 - (this.fontRendererObj.getStringWidth(s2) / 2), l, Constants.WHITE);
+            s2 = a.hasOrdo > 0 ? Integer.toString(a.hasOrdo) : "";
+            this.fontRendererObj.drawString(s2, k + 250 - (this.fontRendererObj.getStringWidth(s2) / 2), l, Constants.WHITE);
+            s2 = a.hasPerdito > 0 ? Integer.toString(a.hasPerdito) : "";
+            this.fontRendererObj.drawString(s2, k + 288 - (this.fontRendererObj.getStringWidth(s2) / 2), l, Constants.WHITE);
+            s2 = a.hasTerra > 0 ? Integer.toString(a.hasTerra) : "";
+            this.fontRendererObj.drawString(s2, k + 331 - (this.fontRendererObj.getStringWidth(s2) / 2), l, Constants.WHITE);
+            s2 = "DELETE";
+            this.fontRendererObj.drawString(s2, k + 375 - (this.fontRendererObj.getStringWidth(s2) / 2), l, Constants.RED);
+            s2 = "MARK";
+            this.fontRendererObj.drawString(s2, k + 425 - (this.fontRendererObj.getStringWidth(s2) / 2), l, Constants.GREEN);
+            l += 12;
         }
 
         super.drawScreen(x, y, f);
 
     }
-
 
 
 }

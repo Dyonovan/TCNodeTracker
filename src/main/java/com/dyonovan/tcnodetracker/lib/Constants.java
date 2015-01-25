@@ -13,4 +13,8 @@ public class Constants {
     public static final String WATER = "aqua";
     public static final String ORDER = "ordo";
     public static final String ENTROPY = "perditio";
+
+    public static final int WHITE = 0xFFFFFF;
+    public static final int RED = 0xCA1E04;
+    public static final int GREEN = 0x26AA30;
 }

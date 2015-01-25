@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class TCNodeTracker {
 
     public static String hostName;
-    public static ArrayList<NodeList> nodelist = new ArrayList<>();
+    public static ArrayList<NodeList> nodelist = new ArrayList<NodeList>();
 
     @Instance(Constants.MODID)
     public static TCNodeTracker instance;

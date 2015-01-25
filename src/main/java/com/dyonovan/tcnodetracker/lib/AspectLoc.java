@@ -3,10 +3,10 @@ package com.dyonovan.tcnodetracker.lib;
 public class AspectLoc {
 
     public int x, y, z, distance;
-    public double hasAer, hasOrdo, hasTerra, hasPerdito, hasIgnis, hasAqua;
+    public int hasAer, hasOrdo, hasTerra, hasPerdito, hasIgnis, hasAqua;
 
-    public AspectLoc(int x, int y, int z, int distance, double hasAer, double hasAqua, double hasIgnis,
-                     double hasOrdo, double hasPerdito, double hasTerra) {
+    public AspectLoc(int x, int y, int z, int distance, int hasAer, int hasAqua, int hasIgnis,
+                     int hasOrdo, int hasPerdito, int hasTerra) {
         this.x = x;
         this.y = y;
         this.z = z;
