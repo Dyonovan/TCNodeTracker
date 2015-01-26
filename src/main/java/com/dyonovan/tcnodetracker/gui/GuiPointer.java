@@ -6,7 +6,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import org.lwjgl.opengl.GL11;
@@ -46,7 +48,7 @@ public class GuiPointer extends Gui {
 
         GL11.glPushMatrix();
         GL11.glTranslated(width + 25, 30, 0);
-        GL11.glRotatef((float) direction, 0, 0, 1);
+        GL11.glRotatef((float) -direction, 0, 0, 1);
         GL11.glTranslated(-25, -25, 0);
 
         tl.startDrawingQuads();
