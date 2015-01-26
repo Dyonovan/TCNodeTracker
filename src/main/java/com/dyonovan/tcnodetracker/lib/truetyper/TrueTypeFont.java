@@ -1,4 +1,4 @@
-package truetyper;
+package com.dyonovan.tcnodetracker.lib.truetyper;
 
 import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.BufferUtils;

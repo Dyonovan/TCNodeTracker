@@ -1,4 +1,4 @@
-package truetyper;
+package com.dyonovan.tcnodetracker.lib.truetyper;
 
 /**
 *	TrueTyper: Open Source TTF implementation for Minecraft.

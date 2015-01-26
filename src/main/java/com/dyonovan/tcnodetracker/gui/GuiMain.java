@@ -10,7 +10,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import truetyper.FontHelper;
+import com.dyonovan.tcnodetracker.lib.truetyper.FontHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;

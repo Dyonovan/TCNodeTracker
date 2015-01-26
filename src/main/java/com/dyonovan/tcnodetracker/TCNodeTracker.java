@@ -18,8 +18,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
-import truetyper.FontLoader;
-import truetyper.TrueTypeFont;
+import com.dyonovan.tcnodetracker.lib.truetyper.FontLoader;
+import com.dyonovan.tcnodetracker.lib.truetyper.TrueTypeFont;
 
 import java.util.ArrayList;
 
@@ -54,6 +54,7 @@ public class TCNodeTracker {
         KeyBindings.init();
     }
 
+    @SideOnly(Side.CLIENT)
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         stringFont = FontLoader.loadSystemFont("Arial", 12f, false);
