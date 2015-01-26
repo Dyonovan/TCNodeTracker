@@ -38,6 +38,7 @@ public class ClientConnectionEvent {
         }
 
         TCNodeTracker.hostName = hostname;
+        TCNodeTracker.nodelist.clear();
 
         JsonUtils.readJson();
 

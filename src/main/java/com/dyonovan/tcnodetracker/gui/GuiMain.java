@@ -59,6 +59,10 @@ public class GuiMain extends GuiScreen {
                 sortNodes(Constants.ENTROPY);
             } else if (mouseX >= w + 172 && mouseX <= w + 203 && mouseY >= 3 && mouseY <= 35) {
                 sortNodes(Constants.EARTH);
+            } else if (mouseX >= 340 && mouseX <= 360 && mouseY >= 54 && mouseY <= 63) {
+                TCNodeTracker.doGui = false;
+                this.mc.displayGuiScreen(null);
+                return;
             }
 
             int l = 68;
@@ -78,6 +82,12 @@ public class GuiMain extends GuiScreen {
                             return;
                         }
                     }
+                } else if (mouseX >= 340 && mouseX <= 360 && mouseY >= l + 2 && mouseY <= l + 9) {
+
+                    this.mc.displayGuiScreen(null);
+                    TCNodeTracker.doGui = true;
+                    TCNodeTracker.xMarker = aspectList.get(i).x;
+                    TCNodeTracker.zMarker = aspectList.get(i).z;
                 }
 
                 l += 11;
@@ -130,6 +140,7 @@ public class GuiMain extends GuiScreen {
         FontHelper.drawString("Type", 135, 54, TCNodeTracker.stringFont, 1f, 1f);
         s1 = "Aer      Aqua      Ignis      Ordo      Perditio      Terra";
         FontHelper.drawString(s1, 168, 54, TCNodeTracker.stringFont, 1f, 1f);
+        FontHelper.drawString("CANCEL", 340, 54, TCNodeTracker.stringFont, 1f, 1f);
 
         for (AspectLoc a : aspectList) {
             String s2 = Integer.toString(a.distance);
@@ -165,10 +176,10 @@ public class GuiMain extends GuiScreen {
             FontHelper.drawString(s2, 262 - (s2.length() / 2), l, TCNodeTracker.stringFont, 1f, 1f);
 
             s2 = "DELETE";
-            FontHelper.drawString(s2, 300, l, TCNodeTracker.stringFont, 1f, 1f);
+            FontHelper.drawString(s2, 300, l, TCNodeTracker.stringFont, 1f, 1f, new float[]{0.941F, 0.188F, 0.102F, 1F});
 
             s2 = "SELECT";
-            FontHelper.drawString(s2, 340, l, TCNodeTracker.stringFont, 1f, 1f); //340
+            FontHelper.drawString(s2, 340, l, TCNodeTracker.stringFont, 1f, 1f, new float[]{0.063F, 0.769F, 0.322F, 1F});
 
             drawRect(0, l + 9, this.width, l + 10, -9408400);
 
@@ -178,6 +189,4 @@ public class GuiMain extends GuiScreen {
         super.drawScreen(x, y, f);
 
     }
-
-
 }
