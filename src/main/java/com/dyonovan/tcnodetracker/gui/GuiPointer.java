@@ -1,14 +1,14 @@
 package com.dyonovan.tcnodetracker.gui;
 
 import com.dyonovan.tcnodetracker.TCNodeTracker;
+import com.dyonovan.tcnodetracker.lib.Constants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import org.lwjgl.opengl.GL11;
@@ -56,9 +56,13 @@ public class GuiPointer extends Gui {
         tl.addVertexWithUV(0, 50, 0, 0, 1);
         tl.addVertexWithUV(50, 50, 0, 1, 1);
         tl.addVertexWithUV(50, 0, 0, 1, 0);
-
         tl.draw();
-
         GL11.glPopMatrix();
+
+        int distancePL = (int) Math.round(this.mc.thePlayer.getDistance(TCNodeTracker.xMarker, TCNodeTracker.yMarker, TCNodeTracker.zMarker));
+        FontRenderer fr = this.mc.fontRenderer;
+        drawString(fr, Integer.toString(distancePL) + " Blocks", (int)width, 60, Constants.WHITE);
+
+
     }
 }

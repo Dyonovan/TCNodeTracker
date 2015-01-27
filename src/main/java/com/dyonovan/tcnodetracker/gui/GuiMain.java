@@ -87,6 +87,7 @@ public class GuiMain extends GuiScreen {
                     this.mc.displayGuiScreen(null);
                     TCNodeTracker.doGui = true;
                     TCNodeTracker.xMarker = aspectList.get(i).x;
+                    TCNodeTracker.yMarker = aspectList.get(i).y;
                     TCNodeTracker.zMarker = aspectList.get(i).z;
                 }
 

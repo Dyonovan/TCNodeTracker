@@ -32,7 +32,7 @@ public class TCNodeTracker {
     public static ArrayList<NodeList> nodelist = new ArrayList<NodeList>();
     public static TrueTypeFont stringFont;
     public static boolean doGui = false;
-    public static int xMarker, zMarker;
+    public static int xMarker, yMarker, zMarker;
 
     @Instance(Constants.MODID)
     public static TCNodeTracker instance;
