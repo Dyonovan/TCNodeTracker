@@ -7,6 +7,7 @@ import com.dyonovan.tcnodetracker.lib.JsonUtils;
 import com.dyonovan.tcnodetracker.lib.NodeList;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -21,8 +22,64 @@ public class GuiMain extends GuiScreen {
 
     private static final ResourceLocation nodes = new ResourceLocation("tcnodetracker:textures/gui/nodes.png");
     public static ArrayList<AspectLoc> aspectList = new ArrayList<AspectLoc>();
+    private int display, start;
+    private String sort;
 
     public GuiMain() {
+    }
+
+    @Override
+    public void initGui() {
+        display = 400;
+        start = (this.width - display) / 2;
+        int x = 66;
+        this.sortNodes("ALL");
+
+        for (int j = 0; j < (aspectList.size() * 2); j += 2) {
+
+            this.buttonList.add(new GuiButton(j, start + 310, x, 34, 10, "Delete"));
+            this.buttonList.add(new GuiButton(j + 1, start + 358, x, 30, 10, "Mark"));
+
+            x += 12;
+        }
+
+        this.buttonList.add(new GuiButton((aspectList.size() * 2), start + 320, 11, 70, 16,"Clear Arrow"));
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) {
+
+        if (button.id == this.buttonList.size() - 1) {
+            TCNodeTracker.doGui = false;
+            this.mc.displayGuiScreen(null);
+            aspectList.clear();
+            return;
+        } else if (button.id % 2 == 0) {
+
+            int i = button.id / 2;
+            for (int j = 0; j < TCNodeTracker.nodelist.size(); j++) {
+                if (TCNodeTracker.nodelist.get(j).x == aspectList.get(i).x &&
+                        TCNodeTracker.nodelist.get(j).y == aspectList.get(i).y &&
+                        TCNodeTracker.nodelist.get(j).z == aspectList.get(i).z) {
+                    TCNodeTracker.nodelist.remove(j);
+                    JsonUtils.writeJson();
+                    aspectList.clear();
+                    this.mc.displayGuiScreen(null);
+                    return;
+                }
+            }
+
+        } else if (button.id % 2 == 1) {
+
+            int i = button.id / 2;
+            this.mc.displayGuiScreen(null);
+            TCNodeTracker.doGui = true;
+            TCNodeTracker.xMarker = aspectList.get(i).x;
+            TCNodeTracker.yMarker = aspectList.get(i).y;
+            TCNodeTracker.zMarker = aspectList.get(i).z;
+            aspectList.clear();
+        }
+
     }
 
     @Override
@@ -59,14 +116,14 @@ public class GuiMain extends GuiScreen {
                 sortNodes(Constants.ENTROPY);
             } else if (mouseX >= w + 172 && mouseX <= w + 203 && mouseY >= 3 && mouseY <= 35) {
                 sortNodes(Constants.EARTH);
-            } else if (mouseX >= 358 && mouseX <= 398 && mouseY >= 54 && mouseY <= 63) {
+            } /*else if (mouseX >= 358 && mouseX <= 398 && mouseY >= 54 && mouseY <= 63) {
                 TCNodeTracker.doGui = false;
                 this.mc.displayGuiScreen(null);
                 aspectList.clear();
                 return;
-            }
+            }*/
 
-            int l = 68;
+            /*int l = 68;
 
             for (int i = 0; i < aspectList.size(); i++) {
 
@@ -94,7 +151,7 @@ public class GuiMain extends GuiScreen {
                 }
 
                 l += 11;
-            }
+            }*/
         }
 
 
@@ -102,10 +159,22 @@ public class GuiMain extends GuiScreen {
 
     private void sortNodes(String aspect) {
 
+        this.sort = aspect;
         aspectList.clear();
 
         for (NodeList n : TCNodeTracker.nodelist) {
-            if (n.aspect.containsKey(aspect)) {
+            if (aspect == "ALL") {
+
+                aspectList.add(new AspectLoc(n.x, n.y, n.z, (int) Math.round(mc.thePlayer.getDistance(n.x, n.y, n.z)),
+                        n.type,
+                        n.aspect.containsKey(Constants.AIR) ? n.aspect.get(Constants.AIR) : 0,
+                        n.aspect.containsKey(Constants.WATER) ? n.aspect.get(Constants.WATER) : 0,
+                        n.aspect.containsKey(Constants.FIRE) ? n.aspect.get(Constants.FIRE) : 0,
+                        n.aspect.containsKey(Constants.ORDER) ? n.aspect.get(Constants.ORDER) : 0,
+                        n.aspect.containsKey(Constants.ENTROPY) ? n.aspect.get(Constants.ENTROPY) : 0,
+                        n.aspect.containsKey(Constants.EARTH) ? n.aspect.get(Constants.EARTH) : 0));
+
+            } else if (n.aspect.containsKey(aspect)) {
 
                 aspectList.add(new AspectLoc(n.x, n.y, n.z, (int) Math.round(mc.thePlayer.getDistance(n.x, n.y, n.z)),
                         n.type,
@@ -128,8 +197,6 @@ public class GuiMain extends GuiScreen {
 
     public void drawScreen(int x, int y, float f) {
 
-        int display = 400;
-        int start = (this.width - display) / 2;
         int l = 68;
         drawDefaultBackground();
 
@@ -146,7 +213,7 @@ public class GuiMain extends GuiScreen {
         FontHelper.drawString("Type", start + 140, 54, TCNodeTracker.stringFont, 1f, 1f);
         s1 = "Aer      Aqua      Ignis      Ordo      Perditio      Terra";
         FontHelper.drawString(s1, start + 188, 54, TCNodeTracker.stringFont, 1f, 1f);
-        FontHelper.drawString("CLEAR", start + 358, 54, TCNodeTracker.stringFont, 1f, 1f);
+        //FontHelper.drawString("CLEAR", start + 358, 54, TCNodeTracker.stringFont, 1f, 1f);
 
         for (AspectLoc a : aspectList) {
             String s2 = Integer.toString(a.distance);
@@ -182,15 +249,15 @@ public class GuiMain extends GuiScreen {
             s2 = a.hasTerra > 0 ? Integer.toString(a.hasTerra) : "";
             FontHelper.drawString(s2, start + (282 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
 
-            s2 = "DELETE";
+            /*s2 = "DELETE";
             FontHelper.drawString(s2, start + 320, l, TCNodeTracker.stringFont, 1f, 1f, new float[]{0.941F, 0.188F, 0.102F, 1F});
 
             s2 = "MARK";
             FontHelper.drawString(s2, start + 360, l, TCNodeTracker.stringFont, 1f, 1f, new float[]{0.063F, 0.769F, 0.322F, 1F});
-
+*/
             drawRect(start, l + 9, start + display, l + 10, -9408400);
 
-            l += 11;
+            l += 12;
         }
 
         super.drawScreen(x, y, f);
