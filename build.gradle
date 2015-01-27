@@ -32,7 +32,7 @@ archivesBaseName = "tcnodetracker"
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version
 
-    replaceIn "BeyondRealityCore.java"
+    replaceIn "Constants.java"
     replace "@VERSION@", "${config.mod_version}"
 
     runDir = "eclipse"
