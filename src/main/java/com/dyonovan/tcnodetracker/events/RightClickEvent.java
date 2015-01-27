@@ -46,18 +46,21 @@ public class RightClickEvent {
                 hm.put(entry.getKey().getTag(), entry.getValue());
             }
 
+            String nodeType = ((INode) i).getNodeType().toString();
+            if (((INode) i).getNodeModifier() != null) nodeType += " - " + ((INode) i).getNodeModifier().toString();
+
             if (TCNodeTracker.nodelist.size() != 0 || TCNodeTracker.nodelist != null) {
                 for (NodeList n : TCNodeTracker.nodelist) {
                     if (event.x == n.x && event.y == n.y && event.z == n.z && dim == n.dim) {
                         n.aspect = hm;
+                        n.type = nodeType;
                         JsonUtils.writeJson();
                         return;
                     }
                 }
             }
-            //TODO add node type (Normal, Bright, etc)
 
-            TCNodeTracker.nodelist.add(new NodeList(hm, dim, null, event.x, event.y, event.z));
+            TCNodeTracker.nodelist.add(new NodeList(hm, dim, nodeType, event.x, event.y, event.z));
             JsonUtils.writeJson();
 
         }

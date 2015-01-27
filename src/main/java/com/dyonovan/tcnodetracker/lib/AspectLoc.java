@@ -4,13 +4,15 @@ public class AspectLoc {
 
     public int x, y, z, distance;
     public int hasAer, hasOrdo, hasTerra, hasPerdito, hasIgnis, hasAqua;
+    public String type;
 
-    public AspectLoc(int x, int y, int z, int distance, int hasAer, int hasAqua, int hasIgnis,
+    public AspectLoc(int x, int y, int z, int distance, String type, int hasAer, int hasAqua, int hasIgnis,
                      int hasOrdo, int hasPerdito, int hasTerra) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.distance = distance;
+        this.type = type;
         this.hasAer = hasAer;
         this.hasAqua = hasAqua;
         this.hasIgnis = hasIgnis;

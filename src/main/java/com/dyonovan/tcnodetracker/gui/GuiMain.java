@@ -59,9 +59,10 @@ public class GuiMain extends GuiScreen {
                 sortNodes(Constants.ENTROPY);
             } else if (mouseX >= w + 172 && mouseX <= w + 203 && mouseY >= 3 && mouseY <= 35) {
                 sortNodes(Constants.EARTH);
-            } else if (mouseX >= 340 && mouseX <= 360 && mouseY >= 54 && mouseY <= 63) {
+            } else if (mouseX >= 358 && mouseX <= 398 && mouseY >= 54 && mouseY <= 63) {
                 TCNodeTracker.doGui = false;
                 this.mc.displayGuiScreen(null);
+                aspectList.clear();
                 return;
             }
 
@@ -69,7 +70,7 @@ public class GuiMain extends GuiScreen {
 
             for (int i = 0; i < aspectList.size(); i++) {
 
-                if (mouseX >= 300 && mouseX <= 320 && mouseY >= l + 2 && mouseY <= l + 9) {
+                if (mouseX >= 320 && mouseX <= 340 && mouseY >= l + 2 && mouseY <= l + 9) {
 
                     for (int j = 0; j < TCNodeTracker.nodelist.size(); j++) {
                         if (TCNodeTracker.nodelist.get(j).x == aspectList.get(i).x &&
@@ -82,13 +83,14 @@ public class GuiMain extends GuiScreen {
                             return;
                         }
                     }
-                } else if (mouseX >= 340 && mouseX <= 360 && mouseY >= l + 2 && mouseY <= l + 9) {
+                } else if (mouseX >= 360 && mouseX <= 380 && mouseY >= l + 2 && mouseY <= l + 9) {
 
                     this.mc.displayGuiScreen(null);
                     TCNodeTracker.doGui = true;
                     TCNodeTracker.xMarker = aspectList.get(i).x;
                     TCNodeTracker.yMarker = aspectList.get(i).y;
                     TCNodeTracker.zMarker = aspectList.get(i).z;
+                    aspectList.clear();
                 }
 
                 l += 11;
@@ -106,6 +108,7 @@ public class GuiMain extends GuiScreen {
             if (n.aspect.containsKey(aspect)) {
 
                 aspectList.add(new AspectLoc(n.x, n.y, n.z, (int) Math.round(mc.thePlayer.getDistance(n.x, n.y, n.z)),
+                        n.type,
                         n.aspect.containsKey(Constants.AIR) ? n.aspect.get(Constants.AIR) : 0,
                         n.aspect.containsKey(Constants.WATER) ? n.aspect.get(Constants.WATER) : 0,
                         n.aspect.containsKey(Constants.FIRE) ? n.aspect.get(Constants.FIRE) : 0,
@@ -138,10 +141,10 @@ public class GuiMain extends GuiScreen {
         FontHelper.drawString("X", 50, 54, TCNodeTracker.stringFont, 1f, 1f);
         FontHelper.drawString("Y", 80, 54, TCNodeTracker.stringFont, 1f, 1f);
         FontHelper.drawString("Z", 110, 54, TCNodeTracker.stringFont, 1f, 1f);
-        FontHelper.drawString("Type", 135, 54, TCNodeTracker.stringFont, 1f, 1f);
+        FontHelper.drawString("Type", 140, 54, TCNodeTracker.stringFont, 1f, 1f);
         s1 = "Aer      Aqua      Ignis      Ordo      Perditio      Terra";
-        FontHelper.drawString(s1, 168, 54, TCNodeTracker.stringFont, 1f, 1f);
-        FontHelper.drawString("CANCEL", 340, 54, TCNodeTracker.stringFont, 1f, 1f);
+        FontHelper.drawString(s1, 188, 54, TCNodeTracker.stringFont, 1f, 1f);
+        FontHelper.drawString("CLEAR", 358, 54, TCNodeTracker.stringFont, 1f, 1f);
 
         for (AspectLoc a : aspectList) {
             String s2 = Integer.toString(a.distance);
@@ -156,31 +159,32 @@ public class GuiMain extends GuiScreen {
             s2 = Integer.toString(a.z);
             FontHelper.drawString(s2, 110 - (s2.length() / 2), l, TCNodeTracker.stringFont, 1f, 1f);
 
-            //TODO Add Type
+            s2 = a.type == null ? "" : a.type;
+            FontHelper.drawString(s2, 135 - (s2.length() / 2), l, TCNodeTracker.stringFont, 1f, 1f);
 
             s2 = a.hasAer > 0 ? Integer.toString(a.hasAer) : "";
-            FontHelper.drawString(s2, 170 - (s2.length() / 2), l, TCNodeTracker.stringFont, 1f, 1f);
+            FontHelper.drawString(s2, 190 - (s2.length() / 2), l, TCNodeTracker.stringFont, 1f, 1f);
 
             s2 = a.hasAqua > 0 ? Integer.toString(a.hasAqua) : "";
-            FontHelper.drawString(s2, 186 - (s2.length() / 2), l, TCNodeTracker.stringFont, 1f, 1f);
+            FontHelper.drawString(s2, 206 - (s2.length() / 2), l, TCNodeTracker.stringFont, 1f, 1f);
 
             s2 = a.hasIgnis > 0 ? Integer.toString(a.hasIgnis) : "";
-            FontHelper.drawString(s2, 203 - (s2.length() / 2), l, TCNodeTracker.stringFont, 1f, 1f);
+            FontHelper.drawString(s2, 223 - (s2.length() / 2), l, TCNodeTracker.stringFont, 1f, 1f);
 
             s2 = a.hasOrdo > 0 ? Integer.toString(a.hasOrdo) : "";
-            FontHelper.drawString(s2, 222 - (s2.length() / 2), l, TCNodeTracker.stringFont, 1f, 1f);
+            FontHelper.drawString(s2, 242 - (s2.length() / 2), l, TCNodeTracker.stringFont, 1f, 1f);
 
             s2 = a.hasPerdito > 0 ? Integer.toString(a.hasPerdito) : "";
-            FontHelper.drawString(s2, 240 - (s2.length() / 2), l, TCNodeTracker.stringFont, 1f, 1f);
+            FontHelper.drawString(s2, 260 - (s2.length() / 2), l, TCNodeTracker.stringFont, 1f, 1f);
 
             s2 = a.hasTerra > 0 ? Integer.toString(a.hasTerra) : "";
-            FontHelper.drawString(s2, 262 - (s2.length() / 2), l, TCNodeTracker.stringFont, 1f, 1f);
+            FontHelper.drawString(s2, 282 - (s2.length() / 2), l, TCNodeTracker.stringFont, 1f, 1f);
 
             s2 = "DELETE";
-            FontHelper.drawString(s2, 300, l, TCNodeTracker.stringFont, 1f, 1f, new float[]{0.941F, 0.188F, 0.102F, 1F});
+            FontHelper.drawString(s2, 320, l, TCNodeTracker.stringFont, 1f, 1f, new float[]{0.941F, 0.188F, 0.102F, 1F});
 
-            s2 = "SELECT";
-            FontHelper.drawString(s2, 340, l, TCNodeTracker.stringFont, 1f, 1f, new float[]{0.063F, 0.769F, 0.322F, 1F});
+            s2 = "MARK";
+            FontHelper.drawString(s2, 360, l, TCNodeTracker.stringFont, 1f, 1f, new float[]{0.063F, 0.769F, 0.322F, 1F});
 
             drawRect(0, l + 9, this.width, l + 10, -9408400);
 
@@ -190,4 +194,5 @@ public class GuiMain extends GuiScreen {
         super.drawScreen(x, y, f);
 
     }
+
 }
