@@ -61,7 +61,7 @@ public class GuiPointer extends Gui {
 
         int distancePL = (int) Math.round(this.mc.thePlayer.getDistance(TCNodeTracker.xMarker, TCNodeTracker.yMarker, TCNodeTracker.zMarker));
         FontRenderer fr = this.mc.fontRenderer;
-        drawString(fr, Integer.toString(distancePL) + " Blocks", (int)width, 60, Constants.WHITE);
+        drawString(fr, Integer.toString(distancePL) + " Blocks", (int)width + 4, 60, Constants.WHITE);
 
 
     }
