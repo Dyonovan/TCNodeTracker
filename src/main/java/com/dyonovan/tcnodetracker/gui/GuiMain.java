@@ -20,8 +20,10 @@ import java.util.Comparator;
 public class GuiMain extends GuiScreen {
 
     private static final ResourceLocation nodes = new ResourceLocation("tcnodetracker:textures/gui/nodes.png");
+    private static final ResourceLocation smallArrow = new ResourceLocation("tcnodetracker:textures/gui/small_arrows.png");
+
     public static ArrayList<AspectLoc> aspectList = new ArrayList<AspectLoc>();
-    private int display, start;
+    private int display, start, low, high;
 
     public GuiMain() {
     }
@@ -33,7 +35,7 @@ public class GuiMain extends GuiScreen {
         int x = 67;
         this.sortNodes("ALL");
 
-        for (int j = 0; j < (aspectList.size() * 2); j += 2) {
+        for (int j = low; j < (high * 2); j += 2) {
 
             this.buttonList.add(new GuiButton(j, start + 410, x, 20, 10, "Del"));
             this.buttonList.add(new GuiButton(j + 1, start + 380, x, 30, 10, "Mark"));
@@ -41,7 +43,8 @@ public class GuiMain extends GuiScreen {
             x += 14;
         }
 
-        this.buttonList.add(new GuiButton((aspectList.size() * 2), start + 350, 11, 70, 16,"Clear Arrow"));
+        this.buttonList.add(new GuiButton((high * 2), start + 350, 11, 70, 16,"Clear Arrow"));
+
     }
 
     @Override
@@ -54,7 +57,7 @@ public class GuiMain extends GuiScreen {
         } else if (button.id % 2 == 0) {
 
             int i = button.id / 2;
-            for (int j = 0; j < TCNodeTracker.nodelist.size(); j++) {
+            for (int j = low; j < high; j++) {
                 if (TCNodeTracker.nodelist.get(j).x == aspectList.get(i).x &&
                         TCNodeTracker.nodelist.get(j).y == aspectList.get(i).y &&
                         TCNodeTracker.nodelist.get(j).z == aspectList.get(i).z) {
@@ -113,6 +116,14 @@ public class GuiMain extends GuiScreen {
                 sortNodes(Constants.ENTROPY);
             } else if (mouseX >= w + 172 && mouseX <= w + 203 && mouseY >= 3 && mouseY <= 35) {
                 sortNodes(Constants.EARTH);
+            } else if (mouseX >= (this.width - 50) / 2 && mouseX <= ((this.width - 50) / 2) + 15 &&
+                    mouseY >= 210 && mouseY <= 227 && low > 0) {
+                low -= 1;
+                high -= 1;
+            } else if (mouseX >= (this.width + 32) / 2 && mouseX <= ((this.width + 32) / 2) + 17 &&
+                    mouseY >= 210 && mouseY <= 227 && high != aspectList.size()) {
+                low += 1;
+                high += 1;
             }
         }
     }
@@ -151,6 +162,8 @@ public class GuiMain extends GuiScreen {
                 return o1.distance - o2.distance;
             }
         });
+        low = 0;
+        high = (aspectList.size() > 10) ? 10 : aspectList.size();
     }
 
 
@@ -186,7 +199,8 @@ public class GuiMain extends GuiScreen {
         this.fontRendererObj.drawString(s1, start + 188, 55, Constants.WHITE);
 
         //TODO Add Dim to List and Select Dim
-        for (AspectLoc a : aspectList) {
+
+        for (AspectLoc a : aspectList.subList(low, high)) {
             String s2 = Integer.toString(a.distance);
             this.fontRendererObj.drawString(s2, start + (11 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
 
@@ -237,6 +251,13 @@ public class GuiMain extends GuiScreen {
 
             l += 14;
         }
+
+        this.mc.getTextureManager().bindTexture(smallArrow);
+        if (low > 0)
+            this.drawTexturedModalRect((this.width - 50) / 2, 210, 1, 1, 15, 17);
+        if (high != aspectList.size())
+        this.drawTexturedModalRect((this.width + 32) / 2, 211, 17, 1, 32, 17);
+
         super.drawScreen(x, y, f);
     }
 }

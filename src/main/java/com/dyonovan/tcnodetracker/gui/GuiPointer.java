@@ -34,9 +34,9 @@ public class GuiPointer extends Gui {
             return;
         }
 
-        if (!this.mc.thePlayer.inventory.armorItemInSlot(3).getItem().getUnlocalizedName().equalsIgnoreCase("item.ItemGoggles")) {
+        /*if (!this.mc.thePlayer.inventory.armorItemInSlot(3).getItem().getUnlocalizedName().equalsIgnoreCase("item.ItemGoggles")) {
             return;
-        }
+        }*/
 
         double direction = (Math.toDegrees(Math.atan2(TCNodeTracker.xMarker - this.mc.thePlayer.posX,
                 TCNodeTracker.zMarker - this.mc.thePlayer.posZ))) + this.mc.thePlayer.rotationYaw;

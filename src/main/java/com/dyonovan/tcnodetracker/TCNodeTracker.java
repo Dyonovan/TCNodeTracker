@@ -37,12 +37,9 @@ public class TCNodeTracker {
     @SideOnly(Side.CLIENT)
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-
         MinecraftForge.EVENT_BUS.register(new RightClickEvent());
         FMLCommonHandler.instance().bus().register(new ClientConnectionEvent());
         FMLCommonHandler.instance().bus().register(new KeyInputEvent());
-
-
     }
 
     @SideOnly(Side.CLIENT)
@@ -56,5 +53,4 @@ public class TCNodeTracker {
     public void postInit(FMLPostInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new GuiPointer(Minecraft.getMinecraft()));
     }
-
 }
