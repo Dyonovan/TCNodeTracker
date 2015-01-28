@@ -11,7 +11,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import com.dyonovan.tcnodetracker.lib.truetyper.FontHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,20 +29,20 @@ public class GuiMain extends GuiScreen {
 
     @Override
     public void initGui() {
-        display = 400;
+        display = 425;
         start = (this.width - display) / 2;
-        int x = 66;
+        int x = 67;
         this.sortNodes("ALL");
 
         for (int j = 0; j < (aspectList.size() * 2); j += 2) {
 
-            this.buttonList.add(new GuiButton(j, start + 310, x, 34, 10, "Delete"));
-            this.buttonList.add(new GuiButton(j + 1, start + 358, x, 30, 10, "Mark"));
+            this.buttonList.add(new GuiButton(j, start + 410, x, 20, 10, "Del"));
+            this.buttonList.add(new GuiButton(j + 1, start + 380, x, 30, 10, "Mark"));
 
-            x += 12;
+            x += 14;
         }
 
-        this.buttonList.add(new GuiButton((aspectList.size() * 2), start + 320, 11, 70, 16,"Clear Arrow"));
+        this.buttonList.add(new GuiButton((aspectList.size() * 2), start + 350, 11, 70, 16,"Clear Arrow"));
     }
 
     @Override
@@ -163,7 +162,7 @@ public class GuiMain extends GuiScreen {
         aspectList.clear();
 
         for (NodeList n : TCNodeTracker.nodelist) {
-            if (aspect == "ALL") {
+            if (aspect.equals("ALL")) {
 
                 aspectList.add(new AspectLoc(n.x, n.y, n.z, (int) Math.round(mc.thePlayer.getDistance(n.x, n.y, n.z)),
                         n.type,
@@ -197,7 +196,7 @@ public class GuiMain extends GuiScreen {
 
     public void drawScreen(int x, int y, float f) {
 
-        int l = 68;
+        int l = 70;
         drawDefaultBackground();
 
         String s1 = "Click aspect to get node list";
@@ -206,48 +205,80 @@ public class GuiMain extends GuiScreen {
         drawRect(start, 50, start + display, 52, -9408400);
         drawRect(start, 64, start + display, 66, -9408400);
 
-        FontHelper.drawString("Distance", start + 5, 54, TCNodeTracker.stringFont, 1f, 1f);
+        this.fontRendererObj.drawString("Dist", start + 2, 55, Constants.WHITE);
+        this.fontRendererObj.drawString("X", start + 50, 55, Constants.WHITE);
+        this.fontRendererObj.drawString("Y", start + 80, 55, Constants.WHITE);
+        this.fontRendererObj.drawString("Z", start + 110, 55, Constants.WHITE);
+        this.fontRendererObj.drawString("Type", start + 140, 55, Constants.WHITE);
+        s1 = "Aer  Aqua  Ignis  Ordo  Perd  Terra";
+        this.fontRendererObj.drawString(s1, start + 188, 55, Constants.WHITE);
+        /*FontHelper.drawString("Distance", start + 5, 54, TCNodeTracker.stringFont, 1f, 1f);
         FontHelper.drawString("X", start + 50, 54, TCNodeTracker.stringFont, 1f, 1f);
         FontHelper.drawString("Y", start + 80, 54, TCNodeTracker.stringFont, 1f, 1f);
         FontHelper.drawString("Z", start + 110, 54, TCNodeTracker.stringFont, 1f, 1f);
         FontHelper.drawString("Type", start + 140, 54, TCNodeTracker.stringFont, 1f, 1f);
         s1 = "Aer      Aqua      Ignis      Ordo      Perditio      Terra";
         FontHelper.drawString(s1, start + 188, 54, TCNodeTracker.stringFont, 1f, 1f);
-        //FontHelper.drawString("CLEAR", start + 358, 54, TCNodeTracker.stringFont, 1f, 1f);
+        FontHelper.drawString("CLEAR", start + 358, 54, TCNodeTracker.stringFont, 1f, 1f);*/
 
+        //TODO Add Dim to List and Select Dim
         for (AspectLoc a : aspectList) {
             String s2 = Integer.toString(a.distance);
-            FontHelper.drawString(s2, start + (14 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            this.fontRendererObj.drawString(s2, start + (11 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
 
             s2 = Integer.toString(a.x);
-            FontHelper.drawString(s2, start + (50 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            //FontHelper.drawString(s2, start + (50 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            this.fontRendererObj.drawString(s2, start + (52 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
 
             s2 = Integer.toString(a.y);
-            FontHelper.drawString(s2, start + (80 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            //FontHelper.drawString(s2, start + (80 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            this.fontRendererObj.drawString(s2, start + (83 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
 
             s2 = Integer.toString(a.z);
-            FontHelper.drawString(s2, start + (110 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            //FontHelper.drawString(s2, start + (110 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            this.fontRendererObj.drawString(s2, start + (112 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
 
-            s2 = a.type == null ? "" : a.type;
-            FontHelper.drawString(s2, start + (135 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            if (a.type == null) s2 = "";
+            else {
+                String[] type = new String[2];
+                if (a.type.contains("-")) {
+                    type = a.type.split("-");
+                } else {
+                    type[0] = a.type;
+                }
+                s2 = "";
+                for (int j = 0; j < type.length; j++) {
+                    if (type[j] != null)
+                    s2 += (s2.equals("")) ? type[j].charAt(0) : "/" + type[j].trim().charAt(0);
+                }
+            }
+            //s2 = a.type == null ? "" : a.type;
+            //FontHelper.drawString(s2, start + (135 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            this.fontRendererObj.drawString(s2, start + (152 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
 
             s2 = a.hasAer > 0 ? Integer.toString(a.hasAer) : "";
-            FontHelper.drawString(s2, start + (190 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            //FontHelper.drawString(s2, start + (190 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            this.fontRendererObj.drawString(s2, start + (195 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
 
             s2 = a.hasAqua > 0 ? Integer.toString(a.hasAqua) : "";
-            FontHelper.drawString(s2, start + (206 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            //FontHelper.drawString(s2, start + (206 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            this.fontRendererObj.drawString(s2, start + (226 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
 
             s2 = a.hasIgnis > 0 ? Integer.toString(a.hasIgnis) : "";
-            FontHelper.drawString(s2, start + (223 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            //FontHelper.drawString(s2, start + (223 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            this.fontRendererObj.drawString(s2, start + (258 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
 
             s2 = a.hasOrdo > 0 ? Integer.toString(a.hasOrdo) : "";
-            FontHelper.drawString(s2, start + (242 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            //FontHelper.drawString(s2, start + (242 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            this.fontRendererObj.drawString(s2, start + (290 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
 
             s2 = a.hasPerdito > 0 ? Integer.toString(a.hasPerdito) : "";
-            FontHelper.drawString(s2, start + (260 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            //FontHelper.drawString(s2, start + (260 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            this.fontRendererObj.drawString(s2, start + (322 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
 
             s2 = a.hasTerra > 0 ? Integer.toString(a.hasTerra) : "";
-            FontHelper.drawString(s2, start + (282 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            //FontHelper.drawString(s2, start + (282 - (s2.length() / 2)), l, TCNodeTracker.stringFont, 1f, 1f);
+            this.fontRendererObj.drawString(s2, start + (358 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
 
             /*s2 = "DELETE";
             FontHelper.drawString(s2, start + 320, l, TCNodeTracker.stringFont, 1f, 1f, new float[]{0.941F, 0.188F, 0.102F, 1F});
@@ -257,7 +288,7 @@ public class GuiMain extends GuiScreen {
 */
             drawRect(start, l + 9, start + display, l + 10, -9408400);
 
-            l += 12;
+            l += 14;
         }
 
         super.drawScreen(x, y, f);
