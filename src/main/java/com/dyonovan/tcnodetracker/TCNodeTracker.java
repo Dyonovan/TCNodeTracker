@@ -18,8 +18,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
-import com.dyonovan.tcnodetracker.lib.truetyper.FontLoader;
-import com.dyonovan.tcnodetracker.lib.truetyper.TrueTypeFont;
 
 import java.util.ArrayList;
 
@@ -30,7 +28,6 @@ public class TCNodeTracker {
 
     public static String hostName;
     public static ArrayList<NodeList> nodelist = new ArrayList<NodeList>();
-    public static TrueTypeFont stringFont;
     public static boolean doGui = false;
     public static int xMarker, yMarker, zMarker;
 
@@ -57,8 +54,6 @@ public class TCNodeTracker {
     @SideOnly(Side.CLIENT)
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        stringFont = FontLoader.loadSystemFont("Arial", 12f, false);
-
         MinecraftForge.EVENT_BUS.register(new GuiPointer(Minecraft.getMinecraft()));
     }
 
