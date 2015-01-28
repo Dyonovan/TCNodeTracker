@@ -12,6 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import org.lwjgl.opengl.GL11;
+import thaumcraft.api.IGoggles;
 
 
 public class GuiPointer extends Gui {
@@ -37,6 +38,9 @@ public class GuiPointer extends Gui {
         /*if (!this.mc.thePlayer.inventory.armorItemInSlot(3).getItem().getUnlocalizedName().equalsIgnoreCase("item.ItemGoggles")) {
             return;
         }*/
+        if (!(this.mc.thePlayer.inventory.armorItemInSlot(3).getItem() instanceof IGoggles)) {
+            return;
+        }
 
         double direction = (Math.toDegrees(Math.atan2(TCNodeTracker.xMarker - this.mc.thePlayer.posX,
                 TCNodeTracker.zMarker - this.mc.thePlayer.posZ))) + this.mc.thePlayer.rotationYaw;
