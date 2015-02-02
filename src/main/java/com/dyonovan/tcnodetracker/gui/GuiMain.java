@@ -7,14 +7,18 @@ import com.dyonovan.tcnodetracker.lib.JsonUtils;
 import com.dyonovan.tcnodetracker.lib.NodeList;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.DimensionManager;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 @SideOnly(Side.CLIENT)
 public class GuiMain extends GuiScreen {
@@ -24,6 +28,7 @@ public class GuiMain extends GuiScreen {
 
     public static ArrayList<AspectLoc> aspectList = new ArrayList<AspectLoc>();
     private int display, start, low, high;
+    private int dimID = 0;
 
     public GuiMain() {
     }
@@ -32,9 +37,17 @@ public class GuiMain extends GuiScreen {
     public void initGui() {
         display = 425;
         start = (this.width - display) / 2;
-        int x = 67;
-        this.sortNodes("ALL");
 
+        dimID = Minecraft.getMinecraft().theWorld.provider.dimensionId ;
+        this.sortNodes("ALL", dimID);
+
+        guiButtons();
+
+    }
+
+    protected void guiButtons() {
+        int x = 67;
+        this.buttonList.clear();
         for (int j = low; j < (high * 2); j += 2) {
 
             this.buttonList.add(new GuiButton(j, start + 410, x, 20, 10, "Del"));
@@ -44,7 +57,7 @@ public class GuiMain extends GuiScreen {
         }
 
         this.buttonList.add(new GuiButton((high * 2), start + 350, 11, 70, 16,"Clear Arrow"));
-
+        this.updateScreen();
     }
 
     @Override
@@ -89,6 +102,7 @@ public class GuiMain extends GuiScreen {
 
     public void updateScreen() {
         super.updateScreen();
+
     }
 
     public void drawDefaultBackground() {
@@ -97,6 +111,7 @@ public class GuiMain extends GuiScreen {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(nodes);
         this.drawTexturedModalRect((this.width - 204) / 2, 1, 0, 0, 204, 35);
+        drawRect(start + 20, 210, start + 100, 225, -9408400);
 
     }
 
@@ -105,17 +120,17 @@ public class GuiMain extends GuiScreen {
 
         if (button >= 0) {
             if (mouseX >= w + 2 && mouseX <= w + 32 && mouseY >= 3 && mouseY <= 35) {
-                sortNodes(Constants.AIR);
+                sortNodes(Constants.AIR, dimID);
             } else if (mouseX >= w + 35 && mouseX <= w + 66 && mouseY >= 3 && mouseY <= 35) {
-                sortNodes(Constants.WATER);
+                sortNodes(Constants.WATER, dimID);
             } else if (mouseX >= w + 70 && mouseX <= w + 101 && mouseY >= 3 && mouseY <= 35) {
-                sortNodes(Constants.FIRE);
+                sortNodes(Constants.FIRE, dimID);
             } else if (mouseX >= w + 104 && mouseX <= w + 135 && mouseY >= 3 && mouseY <= 35) {
-                sortNodes(Constants.ORDER);
+                sortNodes(Constants.ORDER, dimID);
             } else if (mouseX >= w + 139 && mouseX <= w + 170 && mouseY >= 3 && mouseY <= 35) {
-                sortNodes(Constants.ENTROPY);
+                sortNodes(Constants.ENTROPY, dimID);
             } else if (mouseX >= w + 172 && mouseX <= w + 203 && mouseY >= 3 && mouseY <= 35) {
-                sortNodes(Constants.EARTH);
+                sortNodes(Constants.EARTH, dimID);
             } else if (mouseX >= (this.width - 50) / 2 && mouseX <= ((this.width - 50) / 2) + 15 &&
                     mouseY >= 210 && mouseY <= 227 && low > 0) {
                 low -= 1;
@@ -128,14 +143,14 @@ public class GuiMain extends GuiScreen {
         }
     }
 
-    private void sortNodes(String aspect) {
+    private void sortNodes(String aspect, int dimID) {
 
         aspectList.clear();
 
         for (NodeList n : TCNodeTracker.nodelist) {
-            if (aspect.equals("ALL")) {
+            if (aspect.equals("ALL") && n.dim == dimID) {
 
-                aspectList.add(new AspectLoc(n.x, n.y, n.z, (int) Math.round(mc.thePlayer.getDistance(n.x, n.y, n.z)),
+                aspectList.add(new AspectLoc(n.x, n.y, n.z, n.dim, (int) Math.round(mc.thePlayer.getDistance(n.x, n.y, n.z)),
                         n.type,
                         n.aspect.containsKey(Constants.AIR) ? n.aspect.get(Constants.AIR) : 0,
                         n.aspect.containsKey(Constants.WATER) ? n.aspect.get(Constants.WATER) : 0,
@@ -144,9 +159,9 @@ public class GuiMain extends GuiScreen {
                         n.aspect.containsKey(Constants.ENTROPY) ? n.aspect.get(Constants.ENTROPY) : 0,
                         n.aspect.containsKey(Constants.EARTH) ? n.aspect.get(Constants.EARTH) : 0));
 
-            } else if (n.aspect.containsKey(aspect)) {
+            } else if (n.aspect.containsKey(aspect) && n.dim == dimID) {
 
-                aspectList.add(new AspectLoc(n.x, n.y, n.z, (int) Math.round(mc.thePlayer.getDistance(n.x, n.y, n.z)),
+                aspectList.add(new AspectLoc(n.x, n.y, n.z, n.dim, (int) Math.round(mc.thePlayer.getDistance(n.x, n.y, n.z)),
                         n.type,
                         n.aspect.containsKey(Constants.AIR) ? n.aspect.get(Constants.AIR) : 0,
                         n.aspect.containsKey(Constants.WATER) ? n.aspect.get(Constants.WATER) : 0,
@@ -164,6 +179,7 @@ public class GuiMain extends GuiScreen {
         });
         low = 0;
         high = (aspectList.size() > 10) ? 10 : aspectList.size();
+        guiButtons();
     }
 
 
@@ -171,6 +187,9 @@ public class GuiMain extends GuiScreen {
 
         int l = 70;
         drawDefaultBackground();
+
+        String dimName = TCNodeTracker.dims.get(dimID);
+        this.fontRendererObj.drawString(dimName, start + 20 +(80 - this.fontRendererObj.getStringWidth(dimName)) / 2, 214, Constants.WHITE);
 
         String s1 = "Click aspect to get node list";
         this.fontRendererObj.drawString(s1, this.width / 2 - this.fontRendererObj.getStringWidth(s1) / 2, 40, Constants.WHITE);
@@ -215,17 +234,12 @@ public class GuiMain extends GuiScreen {
 
             if (a.type == null) s2 = "";
             else {
-                String[] type = new String[2];
-                if (a.type.contains("-")) {
+                String[] type;
                     type = a.type.split("-");
-                } else {
-                    type[0] = a.type;
-                }
                 s2 = "";
-                for (String aType : type) {
-                    if (aType != null)
+                for (String aType : type)
                         s2 += (s2.equals("")) ? aType.charAt(0) : "/" + aType.trim().charAt(0);
-                }
+
             }
             this.fontRendererObj.drawString(s2, start + (152 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
 
@@ -257,6 +271,7 @@ public class GuiMain extends GuiScreen {
             this.drawTexturedModalRect((this.width - 50) / 2, 210, 1, 1, 15, 17);
         if (high != aspectList.size())
         this.drawTexturedModalRect((this.width + 32) / 2, 211, 17, 1, 32, 17);
+
 
         super.drawScreen(x, y, f);
     }

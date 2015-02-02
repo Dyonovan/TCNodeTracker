@@ -20,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Mod(name = Constants.MODNAME, modid = Constants.MODID, version = Constants.VERSION, dependencies = Constants.DEPENDENCIES,
         acceptableRemoteVersions = "*")
@@ -30,6 +31,7 @@ public class TCNodeTracker {
     public static ArrayList<NodeList> nodelist = new ArrayList<NodeList>();
     public static boolean doGui = false;
     public static int xMarker, yMarker, zMarker;
+    public static HashMap<Integer, String> dims = new HashMap<Integer, String>();
 
     @Instance(Constants.MODID)
     public static TCNodeTracker instance;

@@ -7,6 +7,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraftforge.common.DimensionManager;
 
 import java.io.File;
 import java.net.InetSocketAddress;
@@ -17,6 +18,9 @@ public class ClientConnectionEvent {
     public void onConnected(FMLNetworkEvent.ClientConnectedToServerEvent event) {
 
         String hostname;
+
+        for (int i : DimensionManager.getStaticDimensionIDs())
+            TCNodeTracker.dims.put(i, DimensionManager.createProviderFor(i).getDimensionName());
 
         if (!event.isLocal) {
 

@@ -35,9 +35,6 @@ public class GuiPointer extends Gui {
             return;
         }
 
-        /*if (!this.mc.thePlayer.inventory.armorItemInSlot(3).getItem().getUnlocalizedName().equalsIgnoreCase("item.ItemGoggles")) {
-            return;
-        }*/
         if (!(this.mc.thePlayer.inventory.armorItemInSlot(3).getItem() instanceof IGoggles)) {
             return;
         }
