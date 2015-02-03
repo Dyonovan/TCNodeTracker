@@ -34,7 +34,6 @@ public class TCNodeTracker {
     public static ArrayList<NodeList> nodelist = new ArrayList<NodeList>();
     public static boolean doGui = false;
     public static int xMarker, yMarker, zMarker;
-    //public static LinkedHashMap<Integer, String> dims = new LinkedHashMap<Integer, String>();
     public static List<DimList> dims = new ArrayList<DimList>();
 
     @Instance(Constants.MODID)

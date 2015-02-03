@@ -80,15 +80,17 @@ public class GuiMain extends GuiScreen {
         } else if (button.id % 2 == 0) {
 
             int i = button.id / 2;
-            for (int j = low; j < high; j++) {
-                if (TCNodeTracker.nodelist.get(j).x == aspectList.get(i).x &&
-                        TCNodeTracker.nodelist.get(j).y == aspectList.get(i).y &&
-                        TCNodeTracker.nodelist.get(j).z == aspectList.get(i).z) {
-                    TCNodeTracker.nodelist.remove(j);
-                    JsonUtils.writeJson();
-                    aspectList.clear();
-                    this.mc.displayGuiScreen(null);
-                    return;
+            for (int k = 0; k < TCNodeTracker.nodelist.size(); k++) {
+                for (int j = low; j < high; j++) {
+                    if (TCNodeTracker.nodelist.get(k).x == aspectList.get(i).x &&
+                            TCNodeTracker.nodelist.get(k).y == aspectList.get(i).y &&
+                            TCNodeTracker.nodelist.get(k).z == aspectList.get(i).z) {
+                        TCNodeTracker.nodelist.remove(k);
+                        JsonUtils.writeJson();
+                        aspectList.clear();
+                        this.mc.displayGuiScreen(null);
+                        return;
+                    }
                 }
             }
 
@@ -214,7 +216,6 @@ public class GuiMain extends GuiScreen {
         int l = 70;
         drawDefaultBackground();
 
-        //String dimName = TCNodeTracker.dims. get(dimID);
         this.fontRendererObj.drawString(dimName, start + 20 +(80 - this.fontRendererObj.getStringWidth(dimName)) / 2, 214, Constants.WHITE);
 
         String s1 = "Click aspect to get node list";
