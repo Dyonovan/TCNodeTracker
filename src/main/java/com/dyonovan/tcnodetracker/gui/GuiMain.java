@@ -1,10 +1,7 @@
 package com.dyonovan.tcnodetracker.gui;
 
 import com.dyonovan.tcnodetracker.TCNodeTracker;
-import com.dyonovan.tcnodetracker.lib.AspectLoc;
-import com.dyonovan.tcnodetracker.lib.Constants;
-import com.dyonovan.tcnodetracker.lib.JsonUtils;
-import com.dyonovan.tcnodetracker.lib.NodeList;
+import com.dyonovan.tcnodetracker.lib.*;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -28,9 +25,22 @@ public class GuiMain extends GuiScreen {
 
     public static ArrayList<AspectLoc> aspectList = new ArrayList<AspectLoc>();
     private int display, start, low, high;
-    private int dimID = 0;
+    private int dimID = 0, dimIndex;
+    private String dimName;
 
     public GuiMain() {
+    }
+
+    public void dimFunction() {
+        //dimIndex = TCNodeTracker.dims.indexOf(dimID);
+        for (int x = 0; x < TCNodeTracker.dims.size(); x++) {
+            if (TCNodeTracker.dims.get(x).dimID == dimID) {
+                dimName = TCNodeTracker.dims.get(x).DimName;
+                dimIndex = x;
+                sortNodes("ALL", dimID);
+                return;
+            }
+        }
     }
 
     @Override
@@ -39,8 +49,8 @@ public class GuiMain extends GuiScreen {
         start = (this.width - display) / 2;
 
         dimID = Minecraft.getMinecraft().theWorld.provider.dimensionId ;
-        this.sortNodes("ALL", dimID);
 
+        dimFunction();
         guiButtons();
 
     }
@@ -139,6 +149,22 @@ public class GuiMain extends GuiScreen {
                     mouseY >= 210 && mouseY <= 227 && high != aspectList.size()) {
                 low += 1;
                 high += 1;
+            } else if (mouseX >= start  && mouseX <= start + 17 && mouseY >= 209 && mouseY <= 226) {
+                if (dimIndex == 0){
+                    dimIndex = TCNodeTracker.dims.size() - 1;
+                } else {
+                    dimIndex -= 1;
+                }
+                dimID = TCNodeTracker.dims.get(dimIndex).dimID;
+                dimFunction();
+            } else if (mouseX >= start + 102  && mouseX <= start + 119 && mouseY >= 209 && mouseY <= 226) {
+                if (dimIndex < TCNodeTracker.dims.size() - 1){
+                    dimIndex += 1;
+                } else {
+                    dimIndex = 0;
+                }
+                dimID = TCNodeTracker.dims.get(dimIndex).dimID;
+                dimFunction();
             }
         }
     }
@@ -188,7 +214,7 @@ public class GuiMain extends GuiScreen {
         int l = 70;
         drawDefaultBackground();
 
-        String dimName = TCNodeTracker.dims.get(dimID);
+        //String dimName = TCNodeTracker.dims. get(dimID);
         this.fontRendererObj.drawString(dimName, start + 20 +(80 - this.fontRendererObj.getStringWidth(dimName)) / 2, 214, Constants.WHITE);
 
         String s1 = "Click aspect to get node list";
@@ -216,8 +242,6 @@ public class GuiMain extends GuiScreen {
         this.fontRendererObj.drawString("Type", start + 140, 55, Constants.WHITE);
         s1 = "Aer  Aqua  Ignis  Ordo  Perd  Terra";
         this.fontRendererObj.drawString(s1, start + 188, 55, Constants.WHITE);
-
-        //TODO Add Dim to List and Select Dim
 
         for (AspectLoc a : aspectList.subList(low, high)) {
             String s2 = Integer.toString(a.distance);
@@ -271,7 +295,8 @@ public class GuiMain extends GuiScreen {
             this.drawTexturedModalRect((this.width - 50) / 2, 210, 1, 1, 15, 17);
         if (high != aspectList.size())
         this.drawTexturedModalRect((this.width + 32) / 2, 211, 17, 1, 32, 17);
-
+        this.drawTexturedModalRect(start, 209, 91, 41, 17, 17);
+        this.drawTexturedModalRect(start + 102, 209, 91, 25, 17, 17);
 
         super.drawScreen(x, y, f);
     }

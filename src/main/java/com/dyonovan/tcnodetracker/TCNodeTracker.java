@@ -6,6 +6,7 @@ import com.dyonovan.tcnodetracker.events.KeyInputEvent;
 import com.dyonovan.tcnodetracker.events.RightClickEvent;
 import com.dyonovan.tcnodetracker.gui.GuiPointer;
 import com.dyonovan.tcnodetracker.lib.Constants;
+import com.dyonovan.tcnodetracker.lib.DimList;
 import com.dyonovan.tcnodetracker.lib.NodeList;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -21,6 +22,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @Mod(name = Constants.MODNAME, modid = Constants.MODID, version = Constants.VERSION, dependencies = Constants.DEPENDENCIES,
         acceptableRemoteVersions = "*")
@@ -31,7 +34,8 @@ public class TCNodeTracker {
     public static ArrayList<NodeList> nodelist = new ArrayList<NodeList>();
     public static boolean doGui = false;
     public static int xMarker, yMarker, zMarker;
-    public static HashMap<Integer, String> dims = new HashMap<Integer, String>();
+    //public static LinkedHashMap<Integer, String> dims = new LinkedHashMap<Integer, String>();
+    public static List<DimList> dims = new ArrayList<DimList>();
 
     @Instance(Constants.MODID)
     public static TCNodeTracker instance;
