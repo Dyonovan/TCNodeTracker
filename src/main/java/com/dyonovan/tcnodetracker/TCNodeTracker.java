@@ -56,6 +56,8 @@ public class TCNodeTracker {
     @SideOnly(Side.CLIENT)
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+
         MinecraftForge.EVENT_BUS.register(new GuiPointer(Minecraft.getMinecraft()));
+
     }
 }
