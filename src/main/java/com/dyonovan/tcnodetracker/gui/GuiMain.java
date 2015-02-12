@@ -82,9 +82,9 @@ public class GuiMain extends GuiScreen {
             int i = button.id / 2;
             for (int k = 0; k < TCNodeTracker.nodelist.size(); k++) {
                 for (int j = low; j < high; j++) {
-                    if (TCNodeTracker.nodelist.get(k).x == aspectList.get(i).x &&
-                            TCNodeTracker.nodelist.get(k).y == aspectList.get(i).y &&
-                            TCNodeTracker.nodelist.get(k).z == aspectList.get(i).z) {
+                    if (TCNodeTracker.nodelist.get(k).x == aspectList.get(low + i).x &&
+                            TCNodeTracker.nodelist.get(k).y == aspectList.get(low + i).y &&
+                            TCNodeTracker.nodelist.get(k).z == aspectList.get(low + i).z) {
                         TCNodeTracker.nodelist.remove(k);
                         JsonUtils.writeJson();
                         aspectList.clear();
@@ -99,9 +99,9 @@ public class GuiMain extends GuiScreen {
             int i = button.id / 2;
             this.mc.displayGuiScreen(null);
             TCNodeTracker.doGui = true;
-            TCNodeTracker.xMarker = aspectList.get(i).x;
-            TCNodeTracker.yMarker = aspectList.get(i).y;
-            TCNodeTracker.zMarker = aspectList.get(i).z;
+            TCNodeTracker.xMarker = aspectList.get(low + i).x;
+            TCNodeTracker.yMarker = aspectList.get(low + i).y;
+            TCNodeTracker.zMarker = aspectList.get(low + i).z;
             aspectList.clear();
         }
 
