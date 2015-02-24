@@ -1,6 +1,7 @@
 package com.dyonovan.tcnodetracker.gui;
 
 import com.dyonovan.tcnodetracker.TCNodeTracker;
+import com.dyonovan.tcnodetracker.bindings.KeyBindings;
 import com.dyonovan.tcnodetracker.lib.*;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -105,6 +106,12 @@ public class GuiMain extends GuiScreen {
             aspectList.clear();
         }
 
+    }
+
+    protected void keyTyped(char key, int i) {
+        if (i == KeyBindings.aspectMenu.getKeyCode()) {
+            this.mc.displayGuiScreen(null);
+        }
     }
 
     @Override
