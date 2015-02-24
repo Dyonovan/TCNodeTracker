@@ -2,21 +2,21 @@ package com.dyonovan.tcnodetracker.gui;
 
 import com.dyonovan.tcnodetracker.TCNodeTracker;
 import com.dyonovan.tcnodetracker.bindings.KeyBindings;
-import com.dyonovan.tcnodetracker.lib.*;
+import com.dyonovan.tcnodetracker.lib.AspectLoc;
+import com.dyonovan.tcnodetracker.lib.Constants;
+import com.dyonovan.tcnodetracker.lib.JsonUtils;
+import com.dyonovan.tcnodetracker.lib.NodeList;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.DimensionManager;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 
 @SideOnly(Side.CLIENT)
 public class GuiMain extends GuiScreen {
@@ -56,6 +56,7 @@ public class GuiMain extends GuiScreen {
 
     }
 
+    @SuppressWarnings("unchecked")
     protected void guiButtons() {
         int x = 67;
         this.buttonList.clear();
@@ -76,6 +77,7 @@ public class GuiMain extends GuiScreen {
 
         if (button.id == this.buttonList.size() - 1) {
             TCNodeTracker.doGui = false;
+            TCNodeTracker.yMarker = -1;
             this.mc.displayGuiScreen(null);
             aspectList.clear();
         } else if (button.id % 2 == 0) {
@@ -252,17 +254,21 @@ public class GuiMain extends GuiScreen {
         this.fontRendererObj.drawString(s1, start + 188, 55, Constants.WHITE);
 
         for (AspectLoc a : aspectList.subList(low, high)) {
+            int color;
+            if (TCNodeTracker.xMarker == a.x && TCNodeTracker.yMarker == a.y && TCNodeTracker.zMarker == a.z) {
+                color = Constants.GREEN;
+            } else color = Constants.WHITE;
             String s2 = Integer.toString(a.distance);
-            this.fontRendererObj.drawString(s2, start + (11 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
+            this.fontRendererObj.drawString(s2, start + (11 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = Integer.toString(a.x);
-            this.fontRendererObj.drawString(s2, start + (52 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
+            this.fontRendererObj.drawString(s2, start + (52 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = Integer.toString(a.y);
-            this.fontRendererObj.drawString(s2, start + (83 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
+            this.fontRendererObj.drawString(s2, start + (83 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = Integer.toString(a.z);
-            this.fontRendererObj.drawString(s2, start + (112 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
+            this.fontRendererObj.drawString(s2, start + (112 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             if (a.type == null) s2 = "";
             else {
@@ -273,25 +279,25 @@ public class GuiMain extends GuiScreen {
                         s2 += (s2.equals("")) ? aType.charAt(0) : "/" + aType.trim().charAt(0);
 
             }
-            this.fontRendererObj.drawString(s2, start + (152 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
+            this.fontRendererObj.drawString(s2, start + (152 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = a.hasAer > 0 ? Integer.toString(a.hasAer) : "";
-            this.fontRendererObj.drawString(s2, start + (195 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
+            this.fontRendererObj.drawString(s2, start + (195 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = a.hasAqua > 0 ? Integer.toString(a.hasAqua) : "";
-            this.fontRendererObj.drawString(s2, start + (226 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
+            this.fontRendererObj.drawString(s2, start + (226 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = a.hasIgnis > 0 ? Integer.toString(a.hasIgnis) : "";
-            this.fontRendererObj.drawString(s2, start + (258 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
+            this.fontRendererObj.drawString(s2, start + (258 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = a.hasOrdo > 0 ? Integer.toString(a.hasOrdo) : "";
-            this.fontRendererObj.drawString(s2, start + (290 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
+            this.fontRendererObj.drawString(s2, start + (290 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = a.hasPerdito > 0 ? Integer.toString(a.hasPerdito) : "";
-            this.fontRendererObj.drawString(s2, start + (322 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
+            this.fontRendererObj.drawString(s2, start + (322 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = a.hasTerra > 0 ? Integer.toString(a.hasTerra) : "";
-            this.fontRendererObj.drawString(s2, start + (358 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, Constants.WHITE);
+            this.fontRendererObj.drawString(s2, start + (358 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             drawRect(start, l + 9, start + display, l + 10, -9408400);
 
