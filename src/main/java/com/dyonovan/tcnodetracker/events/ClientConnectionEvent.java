@@ -22,7 +22,7 @@ public class ClientConnectionEvent {
 
         String hostname;
 
-        for (int i : DimensionManager.getStaticDimensionIDs())
+        /*for (int i : DimensionManager.getStaticDimensionIDs())
             TCNodeTracker.dims.add(new DimList(i , DimensionManager.createProviderFor(i).getDimensionName()));
 
         Collections.sort(TCNodeTracker.dims, new Comparator<DimList>() {
@@ -30,7 +30,7 @@ public class ClientConnectionEvent {
             public int compare(DimList o1, DimList o2) {
                 return o1.dimID - o2.dimID;
             }
-        });
+        });*/
         if (!event.isLocal) {
 
             InetSocketAddress address = (InetSocketAddress) event.manager.getSocketAddress();

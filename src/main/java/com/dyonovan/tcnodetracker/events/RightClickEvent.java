@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class RightClickEvent {
 
-
+    @SuppressWarnings("unchecked")
     @SubscribeEvent
     public void playerRightClick(PlayerInteractEvent event) {
 
@@ -28,7 +28,10 @@ public class RightClickEvent {
         }
 
         ItemStack heldItem = event.entityPlayer.inventory.getCurrentItem();
-        if (!heldItem.getUnlocalizedName().equalsIgnoreCase("item.ItemThaumometer")) {
+
+
+        if (!heldItem.getUnlocalizedName().equalsIgnoreCase("item.ItemThaumometer")) {/* ||
+                (TCNodeTracker.isTHLoaded && !heldItem.getUnlocalizedName().equalsIgnoreCase("item.ItemThaumometer"))) {*/
             return;
         }
 

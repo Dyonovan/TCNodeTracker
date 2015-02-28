@@ -9,6 +9,7 @@ import com.dyonovan.tcnodetracker.lib.Constants;
 import com.dyonovan.tcnodetracker.lib.DimList;
 import com.dyonovan.tcnodetracker.lib.NodeList;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -32,7 +33,7 @@ public class TCNodeTracker {
 
     public static String hostName;
     public static ArrayList<NodeList> nodelist = new ArrayList<NodeList>();
-    public static boolean doGui = false;
+    public static boolean doGui = false;//, isTHLoaded;
     public static int xMarker, yMarker, zMarker;
     public static List<DimList> dims = new ArrayList<DimList>();
 
@@ -42,6 +43,8 @@ public class TCNodeTracker {
     @SideOnly(Side.CLIENT)
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+
+        //isTHLoaded = Loader.isModLoaded("ThaumicHorizons");
         MinecraftForge.EVENT_BUS.register(new RightClickEvent());
         FMLCommonHandler.instance().bus().register(new ClientConnectionEvent());
         FMLCommonHandler.instance().bus().register(new KeyInputEvent());

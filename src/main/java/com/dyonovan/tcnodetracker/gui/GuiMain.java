@@ -2,16 +2,14 @@ package com.dyonovan.tcnodetracker.gui;
 
 import com.dyonovan.tcnodetracker.TCNodeTracker;
 import com.dyonovan.tcnodetracker.bindings.KeyBindings;
-import com.dyonovan.tcnodetracker.lib.AspectLoc;
-import com.dyonovan.tcnodetracker.lib.Constants;
-import com.dyonovan.tcnodetracker.lib.JsonUtils;
-import com.dyonovan.tcnodetracker.lib.NodeList;
+import com.dyonovan.tcnodetracker.lib.*;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.DimensionManager;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -48,6 +46,16 @@ public class GuiMain extends GuiScreen {
     public void initGui() {
         display = 425;
         start = (this.width - display) / 2;
+
+        for (int i : DimensionManager.getStaticDimensionIDs())
+            TCNodeTracker.dims.add(new DimList(i , DimensionManager.createProviderFor(i).getDimensionName()));
+
+        Collections.sort(TCNodeTracker.dims, new Comparator<DimList>() {
+            @Override
+            public int compare(DimList o1, DimList o2) {
+                return o1.dimID - o2.dimID;
+            }
+        });
 
         dimID = Minecraft.getMinecraft().theWorld.provider.dimensionId ;
 
