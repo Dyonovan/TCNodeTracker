@@ -111,7 +111,7 @@ public class GuiMain extends GuiScreen {
     }
 
     protected void keyTyped(char key, int i) {
-        if (i == KeyBindings.aspectMenu.getKeyCode()) {
+        if (i == KeyBindings.aspectMenu.getKeyCode() || i == 1) {
             this.mc.displayGuiScreen(null);
         }
     }
