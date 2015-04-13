@@ -110,6 +110,10 @@ public class GuiMain extends GuiScreen {
                     if (TCNodeTracker.nodelist.get(k).x == aspectList.get(low + i).x &&
                             TCNodeTracker.nodelist.get(k).y == aspectList.get(low + i).y &&
                             TCNodeTracker.nodelist.get(k).z == aspectList.get(low + i).z) {
+                        if (TCNodeTracker.doGui && TCNodeTracker.xMarker == aspectList.get(low + i).x &&
+                                TCNodeTracker.yMarker == aspectList.get(low + i).y &&
+                                TCNodeTracker.zMarker == aspectList.get(low + i).z)
+                            TCNodeTracker.doGui = false;
                         TCNodeTracker.nodelist.remove(k);
                         JsonUtils.writeJson();
                         aspectList.clear();
@@ -209,25 +213,8 @@ public class GuiMain extends GuiScreen {
         for (NodeList n : TCNodeTracker.nodelist) {
             if (aspect.equals("ALL") && n.dim == dimID) {
                 getNodes(n);
-                /*aspectList.add(new AspectLoc(n.x, n.y, n.z, n.dim, (int) Math.round(mc.thePlayer.getDistance(n.x, n.y, n.z)),
-                        n.type,
-                        n.aspect.containsKey(Constants.AIR) ? n.aspect.get(Constants.AIR) : 0,
-                        n.aspect.containsKey(Constants.WATER) ? n.aspect.get(Constants.WATER) : 0,
-                        n.aspect.containsKey(Constants.FIRE) ? n.aspect.get(Constants.FIRE) : 0,
-                        n.aspect.containsKey(Constants.ORDER) ? n.aspect.get(Constants.ORDER) : 0,
-                        n.aspect.containsKey(Constants.ENTROPY) ? n.aspect.get(Constants.ENTROPY) : 0,
-                        n.aspect.containsKey(Constants.EARTH) ? n.aspect.get(Constants.EARTH) : 0));*/
-
             } else if (n.aspect.containsKey(aspect) && n.dim == dimID) {
                 getNodes(n);
-                /*aspectList.add(new AspectLoc(n.x, n.y, n.z, n.dim, (int) Math.round(mc.thePlayer.getDistance(n.x, n.y, n.z)),
-                        n.type,
-                        n.aspect.containsKey(Constants.AIR) ? n.aspect.get(Constants.AIR) : 0,
-                        n.aspect.containsKey(Constants.WATER) ? n.aspect.get(Constants.WATER) : 0,
-                        n.aspect.containsKey(Constants.FIRE) ? n.aspect.get(Constants.FIRE) : 0,
-                        n.aspect.containsKey(Constants.ORDER) ? n.aspect.get(Constants.ORDER) : 0,
-                        n.aspect.containsKey(Constants.ENTROPY) ? n.aspect.get(Constants.ENTROPY) : 0,
-                        n.aspect.containsKey(Constants.EARTH) ? n.aspect.get(Constants.EARTH) : 0));*/
             }
         }
         Collections.sort(aspectList, new Comparator<AspectLoc>() {
