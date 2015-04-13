@@ -27,6 +27,7 @@ public class GuiPointer extends Gui {
         this.mc = mc;
     }
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent event) {
 

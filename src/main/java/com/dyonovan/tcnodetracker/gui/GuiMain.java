@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.DimensionManager;
 import org.lwjgl.opengl.GL11;
 
@@ -47,9 +48,24 @@ public class GuiMain extends GuiScreen {
         display = 425;
         start = (this.width - display) / 2;
 
-        for (int i : DimensionManager.getStaticDimensionIDs())
-            TCNodeTracker.dims.add(new DimList(i , DimensionManager.createProviderFor(i).getDimensionName()));
-
+        TCNodeTracker.dims.clear();
+        for (int i : DimensionManager.getStaticDimensionIDs()) {
+            //TCNodeTracker.dims.add(new DimList(i, DimensionManager.createProviderFor(i).getDimensionName()));
+            if (DimensionManager.getWorld(i) != null) {
+                try {
+                    WorldProvider provider = DimensionManager.getProvider(i);
+                    TCNodeTracker.dims.add(new DimList(i, provider.getDimensionName()));
+                } catch (Throwable t) {
+                    TCNodeTracker.dims.add(new DimList(i, Integer.toString(i)));
+                }
+            } else {
+                try {
+                    TCNodeTracker.dims.add(new DimList(i, DimensionManager.createProviderFor(i).getDimensionName()));
+                } catch (Throwable t) {
+                    TCNodeTracker.dims.add(new DimList(i, Integer.toString(i)));
+                }
+            }
+        }
         Collections.sort(TCNodeTracker.dims, new Comparator<DimList>() {
             @Override
             public int compare(DimList o1, DimList o2) {
