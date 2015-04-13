@@ -204,12 +204,13 @@ public class GuiMain extends GuiScreen {
                 }
                 dimID = TCNodeTracker.dims.get(dimIndex).dimID;
                 dimFunction();
+            } else if (isInBounds(mouseX, mouseY, start + 2, 55, start + 20, 65)) {
+
             }
         }
     }
 
-    private void sortNodes(String aspect, int dimID) {
-
+    private void sortNodes(String aspect, int dimID, final String sortBy) {
         aspectList.clear();
 
         for (NodeList n : TCNodeTracker.nodelist) {
@@ -219,9 +220,15 @@ public class GuiMain extends GuiScreen {
                 getNodes(n);
             }
         }
+        switch (sortBy) {
+
+        }
         Collections.sort(aspectList, new Comparator<AspectLoc>() {
             @Override
             public int compare(AspectLoc o1, AspectLoc o2) {
+                switch (sortBy) {
+
+                }
                 return o1.distance - o2.distance;
             }
         });

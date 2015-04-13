@@ -1,5 +1,6 @@
 package com.dyonovan.tcnodetracker.lib;
 
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class AspectLoc {
@@ -24,5 +25,14 @@ public class AspectLoc {
         this.hasPerdito = hasPerdito;
         this.hasTerra = hasTerra;
         this.compound = compound;
+    }
+
+    static Comparator<AspectLoc> getDistComparator() {
+        return new Comparator<AspectLoc>() {
+            @Override
+            public int compare(AspectLoc o1, AspectLoc o2) {
+                return o1.distance - o2.distance;
+            }
+        };
     }
 }

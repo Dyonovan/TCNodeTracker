@@ -17,4 +17,6 @@ public class Constants {
     public static final int WHITE = 0xFFFFFF;
     public static final int RED = 0xCA1E04;
     public static final int GREEN = 0x26AA30;
+
+    public static final String DISTANCE = "distance";
 }
