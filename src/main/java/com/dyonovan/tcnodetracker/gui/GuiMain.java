@@ -112,8 +112,10 @@ public class GuiMain extends GuiScreen {
                             TCNodeTracker.nodelist.get(k).z == aspectList.get(low + i).z) {
                         if (TCNodeTracker.doGui && TCNodeTracker.xMarker == aspectList.get(low + i).x &&
                                 TCNodeTracker.yMarker == aspectList.get(low + i).y &&
-                                TCNodeTracker.zMarker == aspectList.get(low + i).z)
+                                TCNodeTracker.zMarker == aspectList.get(low + i).z) {
                             TCNodeTracker.doGui = false;
+                            TCNodeTracker.yMarker = -1;
+                        }
                         TCNodeTracker.nodelist.remove(k);
                         JsonUtils.writeJson();
                         aspectList.clear();
