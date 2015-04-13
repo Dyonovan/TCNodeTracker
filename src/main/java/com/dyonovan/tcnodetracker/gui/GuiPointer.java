@@ -62,8 +62,12 @@ public class GuiPointer extends Gui {
         GL11.glPopMatrix();
 
         int distancePL = (int) Math.round(this.mc.thePlayer.getDistance(TCNodeTracker.xMarker, mc.thePlayer.posY, TCNodeTracker.zMarker));
+        String dirY = mc.thePlayer.posY > TCNodeTracker.yMarker ? "Below" : mc.thePlayer.posY == TCNodeTracker.yMarker ? "Level" : "Above";
+        String blocks = Integer.toString(distancePL) + " Blocks";
+        int color = dirY.equals("Below") ? Constants.RED : dirY.equals("Level") ? Constants.WHITE : Constants.GREEN;
         FontRenderer fr = this.mc.fontRenderer;
-        drawString(fr, Integer.toString(distancePL) + " Blocks", (int)width + 4, 60, Constants.WHITE);
+        drawString(fr, blocks, (scaledresolution.getScaledWidth() - fr.getStringWidth(blocks)) / 2, 60, Constants.WHITE);
+        drawString(fr, dirY, (int)width + (fr.getStringWidth(dirY) / 2), 70, color);
 
 
     }
