@@ -13,9 +13,7 @@ import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.DimensionManager;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 
 @SideOnly(Side.CLIENT)
 public class GuiMain extends GuiScreen {
@@ -92,7 +90,7 @@ public class GuiMain extends GuiScreen {
             x += 14;
         }
 
-        this.buttonList.add(new GuiButton((high * 2), start + 350, 11, 70, 16,"Clear Arrow"));
+        this.buttonList.add(new GuiButton((high * 2), start + 350, 11, 70, 16, "Clear Arrow"));
         this.updateScreen();
     }
 
@@ -210,26 +208,26 @@ public class GuiMain extends GuiScreen {
 
         for (NodeList n : TCNodeTracker.nodelist) {
             if (aspect.equals("ALL") && n.dim == dimID) {
-
-                aspectList.add(new AspectLoc(n.x, n.y, n.z, n.dim, (int) Math.round(mc.thePlayer.getDistance(n.x, n.y, n.z)),
+                getNodes(n);
+                /*aspectList.add(new AspectLoc(n.x, n.y, n.z, n.dim, (int) Math.round(mc.thePlayer.getDistance(n.x, n.y, n.z)),
                         n.type,
                         n.aspect.containsKey(Constants.AIR) ? n.aspect.get(Constants.AIR) : 0,
                         n.aspect.containsKey(Constants.WATER) ? n.aspect.get(Constants.WATER) : 0,
                         n.aspect.containsKey(Constants.FIRE) ? n.aspect.get(Constants.FIRE) : 0,
                         n.aspect.containsKey(Constants.ORDER) ? n.aspect.get(Constants.ORDER) : 0,
                         n.aspect.containsKey(Constants.ENTROPY) ? n.aspect.get(Constants.ENTROPY) : 0,
-                        n.aspect.containsKey(Constants.EARTH) ? n.aspect.get(Constants.EARTH) : 0));
+                        n.aspect.containsKey(Constants.EARTH) ? n.aspect.get(Constants.EARTH) : 0));*/
 
             } else if (n.aspect.containsKey(aspect) && n.dim == dimID) {
-
-                aspectList.add(new AspectLoc(n.x, n.y, n.z, n.dim, (int) Math.round(mc.thePlayer.getDistance(n.x, n.y, n.z)),
+                getNodes(n);
+                /*aspectList.add(new AspectLoc(n.x, n.y, n.z, n.dim, (int) Math.round(mc.thePlayer.getDistance(n.x, n.y, n.z)),
                         n.type,
                         n.aspect.containsKey(Constants.AIR) ? n.aspect.get(Constants.AIR) : 0,
                         n.aspect.containsKey(Constants.WATER) ? n.aspect.get(Constants.WATER) : 0,
                         n.aspect.containsKey(Constants.FIRE) ? n.aspect.get(Constants.FIRE) : 0,
                         n.aspect.containsKey(Constants.ORDER) ? n.aspect.get(Constants.ORDER) : 0,
                         n.aspect.containsKey(Constants.ENTROPY) ? n.aspect.get(Constants.ENTROPY) : 0,
-                        n.aspect.containsKey(Constants.EARTH) ? n.aspect.get(Constants.EARTH) : 0));
+                        n.aspect.containsKey(Constants.EARTH) ? n.aspect.get(Constants.EARTH) : 0));*/
             }
         }
         Collections.sort(aspectList, new Comparator<AspectLoc>() {
@@ -243,6 +241,38 @@ public class GuiMain extends GuiScreen {
         guiButtons();
     }
 
+    private void getNodes(NodeList nodes) {
+        int air = 0;
+        int water = 0;
+        int fire = 0;
+        int order = 0;
+        int entropy = 0;
+        int earth = 0;
+        HashMap<String, Integer> compound = new HashMap<String, Integer>();
+
+        for (Map.Entry<String, Integer> node : nodes.aspect.entrySet()) {
+            String aspect = node.getKey();
+            int amount = node.getValue();
+
+            if (aspect.equalsIgnoreCase(Constants.AIR))
+                air += amount;
+            else if (aspect.equalsIgnoreCase(Constants.WATER))
+                water += amount;
+            else if (aspect.equalsIgnoreCase(Constants.FIRE))
+                fire += amount;
+            else if (aspect.equalsIgnoreCase(Constants.ORDER))
+                order += amount;
+            else if (aspect.equalsIgnoreCase(Constants.ENTROPY))
+                entropy += amount;
+            else if (aspect.equalsIgnoreCase(Constants.EARTH))
+                earth += amount;
+            else compound.put(aspect, amount);
+        }
+
+        aspectList.add(new AspectLoc(nodes.x, nodes.y, nodes.z, nodes.dim,
+                (int) Math.round(mc.thePlayer.getDistance(nodes.x, mc.thePlayer.posY, nodes.z)),
+                nodes.type, air, water, fire, order, entropy, earth, compound));
+    }
 
     public void drawScreen(int x, int y, float f) {
 
@@ -325,6 +355,14 @@ public class GuiMain extends GuiScreen {
 
             drawRect(start, l + 9, start + display, l + 10, -9408400);
 
+            if (isInBounds(x, y, start + 140, l - 5, start + 186, l + 8)) {
+                List<String> toolTip = new ArrayList<String>();
+                toolTip.add("\u00a7" + Integer.toHexString(2) + "Compound Aspects");
+                for (Map.Entry<String, Integer> node : a.compound.entrySet()) {
+                    toolTip.add(node.getKey().toUpperCase() + ": " + node.getValue());
+                }
+                drawHoveringText(toolTip, x, y, fontRendererObj);
+            }
             l += 14;
         }
 
@@ -337,5 +375,10 @@ public class GuiMain extends GuiScreen {
         this.drawTexturedModalRect(start + 102, 209, 91, 25, 17, 17);
 
         super.drawScreen(x, y, f);
+    }
+
+    public static boolean isInBounds(int x, int y, int a, int b, int c, int d)
+    {
+        return (x >= a && x <= c && y >= b && y <=d);
     }
 }
