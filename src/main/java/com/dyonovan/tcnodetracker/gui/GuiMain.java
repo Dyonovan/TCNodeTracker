@@ -21,21 +21,21 @@ public class GuiMain extends GuiScreen {
     private static final ResourceLocation nodes = new ResourceLocation("tcnodetracker:textures/gui/nodes.png");
     private static final ResourceLocation smallArrow = new ResourceLocation("tcnodetracker:textures/gui/small_arrows.png");
 
-    public static ArrayList<AspectLoc> aspectList = new ArrayList<AspectLoc>();
+    public static ArrayList<AspectLoc> aspectList = new ArrayList<>();
     private int display, start, low, high;
     private int dimID = 0, dimIndex;
-    private String dimName;
+    private String dimName, currentAspect;
 
     public GuiMain() {
     }
 
     public void dimFunction() {
-        //dimIndex = TCNodeTracker.dims.indexOf(dimID);
         for (int x = 0; x < TCNodeTracker.dims.size(); x++) {
             if (TCNodeTracker.dims.get(x).dimID == dimID) {
                 dimName = TCNodeTracker.dims.get(x).DimName;
                 dimIndex = x;
-                sortNodes("ALL", dimID);
+                currentAspect = "ALL";
+                sortNodes(Constants.DISTANCE);
                 return;
             }
         }
@@ -169,17 +169,23 @@ public class GuiMain extends GuiScreen {
 
         if (button >= 0) {
             if (mouseX >= w + 2 && mouseX <= w + 32 && mouseY >= 3 && mouseY <= 35) {
-                sortNodes(Constants.AIR, dimID);
+                currentAspect = Constants.AIR;
+                sortNodes(Constants.DISTANCE);
             } else if (mouseX >= w + 35 && mouseX <= w + 66 && mouseY >= 3 && mouseY <= 35) {
-                sortNodes(Constants.WATER, dimID);
+                currentAspect = Constants.WATER;
+                sortNodes(Constants.DISTANCE);
             } else if (mouseX >= w + 70 && mouseX <= w + 101 && mouseY >= 3 && mouseY <= 35) {
-                sortNodes(Constants.FIRE, dimID);
+                currentAspect = Constants.FIRE;
+                sortNodes(Constants.DISTANCE);
             } else if (mouseX >= w + 104 && mouseX <= w + 135 && mouseY >= 3 && mouseY <= 35) {
-                sortNodes(Constants.ORDER, dimID);
+                currentAspect = Constants.ORDER;
+                sortNodes(Constants.DISTANCE);
             } else if (mouseX >= w + 139 && mouseX <= w + 170 && mouseY >= 3 && mouseY <= 35) {
-                sortNodes(Constants.ENTROPY, dimID);
+                currentAspect = Constants.ENTROPY;
+                sortNodes(Constants.DISTANCE);
             } else if (mouseX >= w + 172 && mouseX <= w + 203 && mouseY >= 3 && mouseY <= 35) {
-                sortNodes(Constants.EARTH, dimID);
+                currentAspect = Constants.EARTH;
+                sortNodes(Constants.DISTANCE);
             } else if (mouseX >= (this.width - 50) / 2 && mouseX <= ((this.width - 50) / 2) + 15 &&
                     mouseY >= 210 && mouseY <= 227 && low > 0) {
                 low -= 1;
@@ -205,33 +211,60 @@ public class GuiMain extends GuiScreen {
                 dimID = TCNodeTracker.dims.get(dimIndex).dimID;
                 dimFunction();
             } else if (isInBounds(mouseX, mouseY, start + 2, 55, start + 20, 65)) {
-
+                sortNodes(Constants.DISTANCE);
+            } else if (isInBounds(mouseX, mouseY, start + 188, 55, start + 208, 65)) {
+                sortNodes(Constants.AIR);
+            } else if (isInBounds(mouseX, mouseY, start + 214, 55, start + 238, 65)) {
+                sortNodes(Constants.WATER);
+            } else if (isInBounds(mouseX, mouseY, start + 246, 55, start + 270, 65)) {
+                sortNodes(Constants.FIRE);
+            } else if (isInBounds(mouseX, mouseY, start + 278, 55, start + 302, 65)) {
+                sortNodes(Constants.ORDER);
+            } else if (isInBounds(mouseX, mouseY, start + 310, 55, start + 334, 65)) {
+                sortNodes(Constants.ENTROPY);
+            } else if (isInBounds(mouseX, mouseY, start + 342, 55, start + 372, 65)) {
+                sortNodes(Constants.EARTH);
             }
         }
     }
 
-    private void sortNodes(String aspect, int dimID, final String sortBy) {
+    private void sortNodes(final String sortBy) {
         aspectList.clear();
 
         for (NodeList n : TCNodeTracker.nodelist) {
-            if (aspect.equals("ALL") && n.dim == dimID) {
+            if (currentAspect.equals("ALL") && n.dim == dimID) {
                 getNodes(n);
-            } else if (n.aspect.containsKey(aspect) && n.dim == dimID) {
+            } else if (n.aspect.containsKey(currentAspect) && n.dim == dimID) {
                 getNodes(n);
             }
         }
+        Comparator<AspectLoc> comparator;
         switch (sortBy) {
-
+            case Constants.DISTANCE:
+                comparator = AspectLoc.getDistComparator();
+                break;
+            case Constants.AIR:
+                comparator = AspectLoc.getAerComparator();
+                break;
+            case Constants.WATER:
+                comparator = AspectLoc.getAquaComparator();
+                break;
+            case Constants.FIRE:
+                comparator = AspectLoc.getIgnisComparator();
+                break;
+            case Constants.ORDER:
+                comparator = AspectLoc.getOrdoComparator();
+                break;
+            case Constants.ENTROPY:
+                comparator = AspectLoc.getPerdComparator();
+                break;
+            case Constants.EARTH:
+                comparator = AspectLoc.getTerraComparator();
+                break;
+            default:
+                comparator = AspectLoc.getDistComparator();
         }
-        Collections.sort(aspectList, new Comparator<AspectLoc>() {
-            @Override
-            public int compare(AspectLoc o1, AspectLoc o2) {
-                switch (sortBy) {
-
-                }
-                return o1.distance - o2.distance;
-            }
-        });
+        Collections.sort(aspectList, comparator);
         low = 0;
         high = (aspectList.size() > 10) ? 10 : aspectList.size();
         guiButtons();
@@ -244,7 +277,7 @@ public class GuiMain extends GuiScreen {
         int order = 0;
         int entropy = 0;
         int earth = 0;
-        HashMap<String, Integer> compound = new HashMap<String, Integer>();
+        HashMap<String, Integer> compound = new HashMap<>();
 
         for (Map.Entry<String, Integer> node : nodes.aspect.entrySet()) {
             String aspect = node.getKey();
@@ -352,7 +385,7 @@ public class GuiMain extends GuiScreen {
             drawRect(start, l + 9, start + display, l + 10, -9408400);
 
             if (isInBounds(x, y, start + 140, l - 5, start + 186, l + 8)) {
-                List<String> toolTip = new ArrayList<String>();
+                List<String> toolTip = new ArrayList<>();
                 toolTip.add("\u00a7" + Integer.toHexString(2) + "Compound Aspects");
                 for (Map.Entry<String, Integer> node : a.compound.entrySet()) {
                     toolTip.add(node.getKey().toUpperCase() + ": " + node.getValue());

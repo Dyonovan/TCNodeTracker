@@ -27,11 +27,65 @@ public class AspectLoc {
         this.compound = compound;
     }
 
-    static Comparator<AspectLoc> getDistComparator() {
+    public static Comparator<AspectLoc> getDistComparator() {
         return new Comparator<AspectLoc>() {
             @Override
             public int compare(AspectLoc o1, AspectLoc o2) {
                 return o1.distance - o2.distance;
+            }
+        };
+    }
+
+    public static Comparator<AspectLoc> getAerComparator() {
+        return new Comparator<AspectLoc>() {
+            @Override
+            public int compare(AspectLoc o1, AspectLoc o2) {
+                return o1.hasAer - o2.hasAer;
+            }
+        };
+    }
+
+    public static Comparator<AspectLoc> getAquaComparator() {
+        return new Comparator<AspectLoc>() {
+            @Override
+            public int compare(AspectLoc o1, AspectLoc o2) {
+                return o1.hasAqua - o2.hasAqua;
+            }
+        };
+    }
+
+    public static Comparator<AspectLoc> getIgnisComparator() {
+        return new Comparator<AspectLoc>() {
+            @Override
+            public int compare(AspectLoc o1, AspectLoc o2) {
+                return o1.hasIgnis - o2.hasIgnis;
+            }
+        };
+    }
+
+    public static Comparator<AspectLoc> getOrdoComparator() {
+        return new Comparator<AspectLoc>() {
+            @Override
+            public int compare(AspectLoc o1, AspectLoc o2) {
+                return o1.hasOrdo - o2.hasOrdo;
+            }
+        };
+    }
+
+    public static Comparator<AspectLoc> getPerdComparator() {
+        return new Comparator<AspectLoc>() {
+            @Override
+            public int compare(AspectLoc o1, AspectLoc o2) {
+                return o1.hasPerdito - o2.hasPerdito;
+            }
+        };
+    }
+
+    public static Comparator<AspectLoc> getTerraComparator() {
+        return new Comparator<AspectLoc>() {
+            @Override
+            public int compare(AspectLoc o1, AspectLoc o2) {
+                return o1.hasTerra - o2.hasTerra;
             }
         };
     }
