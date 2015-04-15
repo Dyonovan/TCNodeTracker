@@ -11,13 +11,14 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.nodes.INode;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class RightClickEvent {
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "unused"})
     @SubscribeEvent
     public void playerRightClick(PlayerInteractEvent event) {
 
@@ -29,9 +30,7 @@ public class RightClickEvent {
 
         ItemStack heldItem = event.entityPlayer.inventory.getCurrentItem();
 
-
-        if (!heldItem.getUnlocalizedName().equalsIgnoreCase("item.ItemThaumometer")) {/* ||
-                (TCNodeTracker.isTHLoaded && !heldItem.getUnlocalizedName().equalsIgnoreCase("item.ItemThaumometer"))) {*/
+        if (!heldItem.getUnlocalizedName().equalsIgnoreCase("item.ItemThaumometer")) {
             return;
         }
 
@@ -42,7 +41,6 @@ public class RightClickEvent {
             AspectList aspectList = ((INode) i).getAspects();
             if (aspectList.size() == 0) return;
             HashMap hm = new HashMap();
-            //JsonUtils.readJson();
             int dim = event.entityPlayer.worldObj.provider.dimensionId;
 
             for (Map.Entry<Aspect, Integer> entry : aspectList.aspects.entrySet()) {
@@ -57,15 +55,14 @@ public class RightClickEvent {
                     if (event.x == n.x && event.y == n.y && event.z == n.z && dim == n.dim) {
                         n.aspect = hm;
                         n.type = nodeType;
+                        n.date = new Date();
                         JsonUtils.writeJson();
                         return;
                     }
                 }
             }
-
-            TCNodeTracker.nodelist.add(new NodeList(hm, dim, nodeType, event.x, event.y, event.z));
+            TCNodeTracker.nodelist.add(new NodeList(hm, dim, nodeType, event.x, event.y, event.z, new Date()));
             JsonUtils.writeJson();
-
         }
     }
 }

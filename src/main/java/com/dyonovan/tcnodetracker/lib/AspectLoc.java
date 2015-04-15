@@ -1,6 +1,7 @@
 package com.dyonovan.tcnodetracker.lib;
 
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 
 public class AspectLoc {
@@ -9,13 +10,15 @@ public class AspectLoc {
     public int hasAer, hasOrdo, hasTerra, hasPerdito, hasIgnis, hasAqua;
     public String type;
     public HashMap<String, Integer> compound;
+    public Date date;
 
-    public AspectLoc(int x, int y, int z, int dimID, int distance, String type, int hasAer, int hasAqua, int hasIgnis,
+    public AspectLoc(int x, int y, int z, int dimID, Date date, int distance, String type, int hasAer, int hasAqua, int hasIgnis,
                      int hasOrdo, int hasPerdito, int hasTerra, HashMap<String, Integer> compound) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.dimID = dimID;
+        this.date = date;
         this.distance = distance;
         this.type = type;
         this.hasAer = hasAer;

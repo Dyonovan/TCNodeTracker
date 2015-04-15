@@ -13,6 +13,7 @@ import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.DimensionManager;
 import org.lwjgl.opengl.GL11;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @SideOnly(Side.CLIENT)
@@ -265,7 +266,7 @@ public class GuiMain extends GuiScreen {
                 comparator = AspectLoc.getDistComparator();
         }
         Collections.sort(aspectList, comparator);
-        if (sortBy != Constants.DISTANCE)
+        if (!sortBy.equals(Constants.DISTANCE))
             Collections.reverse(aspectList);
         low = 0;
         high = (aspectList.size() > 10) ? 10 : aspectList.size();
@@ -300,7 +301,7 @@ public class GuiMain extends GuiScreen {
             else compound.put(aspect, amount);
         }
 
-        aspectList.add(new AspectLoc(nodes.x, nodes.y, nodes.z, nodes.dim,
+        aspectList.add(new AspectLoc(nodes.x, nodes.y, nodes.z, nodes.dim, nodes.date,
                 (int) Math.round(mc.thePlayer.getDistance(nodes.x, mc.thePlayer.posY, nodes.z)),
                 nodes.type, air, water, fire, order, entropy, earth, compound));
     }
@@ -393,7 +394,15 @@ public class GuiMain extends GuiScreen {
                     toolTip.add(node.getKey().toUpperCase() + ": " + node.getValue());
                 }
                 drawHoveringText(toolTip, x, y, fontRendererObj);
+            } else if (isInBounds(x, y, start + 2, l - 5, start + 40, l + 8)) {
+                List<String> toolTip = new ArrayList<>();
+                toolTip.add("\u00a7" + Integer.toHexString(2) + "Last Scanned");
+                if (a.date != null) {
+                    toolTip.add(new SimpleDateFormat("HH:mm:ss yyyy.MM.dd").format(a.date));
+                }
+                drawHoveringText(toolTip, x, y, fontRendererObj);
             }
+
             l += 14;
         }
 
