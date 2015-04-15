@@ -44,7 +44,7 @@ public class TCNodeTracker {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
 
-        ConfigHandler.init(new Configuration(event.getSuggestedConfigurationFile()));
+        ConfigHandler.init(event.getSuggestedConfigurationFile());
 
         MinecraftForge.EVENT_BUS.register(new RightClickEvent());
         FMLCommonHandler.instance().bus().register(new ClientConnectionEvent());

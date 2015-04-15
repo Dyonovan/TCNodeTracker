@@ -1,6 +1,7 @@
 package com.dyonovan.tcnodetracker.gui;
 
 import com.dyonovan.tcnodetracker.TCNodeTracker;
+import com.dyonovan.tcnodetracker.handlers.ConfigHandler;
 import com.dyonovan.tcnodetracker.lib.Constants;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
@@ -49,7 +50,7 @@ public class GuiPointer extends Gui {
         double width = (scaledresolution.getScaledWidth() - 50) / 2;
 
         GL11.glPushMatrix();
-        GL11.glTranslated(width + 25, 30, 0);
+        GL11.glTranslated(width + 25 + ConfigHandler.arrowX, 30 + ConfigHandler.arrowY, 0);
         GL11.glRotatef((float) -direction, 0, 0, 1);
         GL11.glTranslated(-25, -25, 0);
 
@@ -66,8 +67,10 @@ public class GuiPointer extends Gui {
         String blocks = Integer.toString(distancePL) + " Blocks";
         int color = dirY.equals("Below") ? Constants.RED : dirY.equals("Level") ? Constants.WHITE : Constants.GREEN;
         FontRenderer fr = this.mc.fontRenderer;
-        drawString(fr, blocks, (scaledresolution.getScaledWidth() - fr.getStringWidth(blocks)) / 2, 60, Constants.WHITE);
-        drawString(fr, dirY, (int)width + (fr.getStringWidth(dirY) / 2), 70, color);
+        drawString(fr, blocks, ((scaledresolution.getScaledWidth() - fr.getStringWidth(blocks)) / 2) + ConfigHandler.arrowX,
+                60 + ConfigHandler.arrowY, Constants.WHITE);
+        drawString(fr, dirY, ((int)width + (fr.getStringWidth(dirY) / 2)) + ConfigHandler.arrowX,
+                70 + ConfigHandler.arrowY, color);
 
 
     }
