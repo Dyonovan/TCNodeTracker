@@ -71,9 +71,9 @@ public class GuiPointer extends Gui {
         String blocks = Integer.toString(distancePL) + " Blocks";
         int color = dirY.equals("Below") ? Constants.RED : dirY.equals("Level") ? Constants.WHITE : Constants.GREEN;
         FontRenderer fr = this.mc.fontRenderer;
-        drawString(fr, blocks, ((scaledresolution.getScaledWidth() - fr.getStringWidth(blocks)) / 2) + ConfigHandler.arrowX,
+        fr.drawString(blocks, ((scaledresolution.getScaledWidth() - fr.getStringWidth(blocks)) / 2) + ConfigHandler.arrowX,
                 60 + ConfigHandler.arrowY, Constants.WHITE);
-        drawString(fr, dirY, ((int)width + (fr.getStringWidth(dirY) / 2)) + ConfigHandler.arrowX,
+        fr.drawString(dirY, ((int)width + (fr.getStringWidth(dirY) / 2)) + ConfigHandler.arrowX,
                 70 + ConfigHandler.arrowY, color);
 
 

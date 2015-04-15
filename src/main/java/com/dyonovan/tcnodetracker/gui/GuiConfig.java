@@ -19,15 +19,30 @@ public class GuiConfig extends GuiScreen {
     public static final int RIGHT = 3;
     public static final int RESET = 4;
     public static final int ARROW_TYPE = 5;
+    public static final int ARROW_SIZE_SMALL = 6;
+    public static final int ARROW_SIZE_LARGE = 7;
 
     private static final ResourceLocation arrow = new ResourceLocation("tcnodetracker:textures/gui/arrow.png");
     private static final ResourceLocation altArrow = new ResourceLocation("tcnodetracker:textures/gui/arrow2.png");
 
     public GuiConfig() { }
 
-    @SuppressWarnings("unchecked")
+/*    @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
+    }*/
+
+    @SuppressWarnings("unchecked")
+    private void drawButtons() {
+
+        GuiButton arrowLarge = new GuiButton(ARROW_SIZE_LARGE, ((width / 4) * 3) + 70, height - 50, 15, 20, ">>");
+        GuiButton arrowSmall = new GuiButton(ARROW_SIZE_SMALL, ((width / 4) * 3) - 10, height - 50, 15, 20, "<<");
+
+        if (ConfigHandler.arrowSize >= 1)
+            arrowLarge.enabled = false;
+        else if (ConfigHandler.arrowSize <= 0.05)
+            arrowSmall.enabled = false;
+
         buttonList.clear();
 
         buttonList.add(new GuiButton(UP, (width / 2) - 17, height - 75, 35, 20, "UP"));
@@ -36,6 +51,8 @@ public class GuiConfig extends GuiScreen {
         buttonList.add(new GuiButton(RIGHT, (width / 2) + 26, height - 50, 35, 20, "RIGHT"));
         buttonList.add(new GuiButton(RESET, (width / 2) - 17, height - 50, 35, 20, "RESET"));
         buttonList.add(new GuiButton(ARROW_TYPE, (width / 4) - 70, height - 50, 70, 20, "Arrow Type"));
+        buttonList.add(arrowSmall);
+        buttonList.add(arrowLarge);
 
         updateScreen();
     }
@@ -64,6 +81,13 @@ public class GuiConfig extends GuiScreen {
                     ConfigHandler.altArrow = false;
                 else if (!ConfigHandler.altArrow)
                     ConfigHandler.altArrow = true;
+                break;
+            case ARROW_SIZE_SMALL:
+                ConfigHandler.arrowSize -= 0.05;
+                break;
+            case ARROW_SIZE_LARGE:
+                ConfigHandler.arrowSize += 0.05;
+                break;
         }
     }
 
@@ -72,11 +96,21 @@ public class GuiConfig extends GuiScreen {
 
         drawDefaultBackground();
 
+        drawButtons();
+
         FontRenderer fr = this.mc.fontRenderer;
-        drawString(fr, "# Blocks", (width - fr.getStringWidth("# Blocks")) / 2 + ConfigHandler.arrowX,
+
+        GL11.glPushMatrix();
+        GL11.glScalef((float) ConfigHandler.arrowSize, (float) ConfigHandler.arrowSize, 1F);
+        GL11.glTranslatef((float) ConfigHandler.arrowSize * 1, (float) ConfigHandler.arrowSize * 1, 1F);
+        fr.drawString("# Blocks", (width - fr.getStringWidth("# Blocks")) / 2 + ConfigHandler.arrowX,
                 60 + ConfigHandler.arrowY, Constants.WHITE);
-        drawString(fr, "Below", (width - fr.getStringWidth("Below")) / 2 + ConfigHandler.arrowX,
+        fr.drawString("Below", (width - fr.getStringWidth("Below")) / 2 + ConfigHandler.arrowX,
                 70 + ConfigHandler.arrowY, Constants.WHITE);
+        GL11.glPopMatrix();
+
+        drawString(fr, "Size: " + Math.round(ConfigHandler.arrowSize * 100) + "%", ((width / 4) * 3) + 12,
+                height - 43, Constants.WHITE);
 
         super.drawScreen(mouseX, mouseY, f);
     }
@@ -95,7 +129,7 @@ public class GuiConfig extends GuiScreen {
         GL11.glPushMatrix();
         GL11.glTranslated(((width / 2) - 25) + ConfigHandler.arrowX, 5 + ConfigHandler.arrowY, 0);
         //GL11.glTranslated(-25, -25, 0);
-
+        GL11.glScalef((float)ConfigHandler.arrowSize, (float)ConfigHandler.arrowSize, 1F);
         Tessellator tl = Tessellator.instance;
         tl.startDrawingQuads();
         tl.addVertexWithUV(0, 0, 0, 0, 0);
@@ -125,10 +159,12 @@ public class GuiConfig extends GuiScreen {
         Property arrowX = ConfigHandler.config.get("Arrow Location", "XCoord", 0);
         Property arrowY = ConfigHandler.config.get("Arrow Location", "YCoord", 0);
         Property arrowType = ConfigHandler.config.get("Arrow Type", "Use Alt Arrow Texture", false);
+        Property arrowSize = ConfigHandler.config.get("Arrow Size", "Arrow Size 0-1", 1);
 
         arrowX.set(ConfigHandler.arrowX);
         arrowY.set(ConfigHandler.arrowY);
         arrowType.set(ConfigHandler.altArrow);
+        arrowSize.set(ConfigHandler.arrowSize);
 
         ConfigHandler.config.save();
 
