@@ -33,6 +33,9 @@ public class GuiPointer extends Gui {
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent event) {
 
+        final int arrowWidth = 64;
+        final int arrowHeight= 64;
+
         if (event.isCancelable() || event.type != ElementType.EXPERIENCE || !TCNodeTracker.doGui ||
                 this.mc.thePlayer.inventory.armorItemInSlot(3) == null){
             return;
@@ -45,24 +48,26 @@ public class GuiPointer extends Gui {
         double direction = (Math.toDegrees(Math.atan2(TCNodeTracker.xMarker - this.mc.thePlayer.posX,
                 TCNodeTracker.zMarker - this.mc.thePlayer.posZ))) + this.mc.thePlayer.rotationYaw;
 
-        Tessellator tl = Tessellator.instance;
         if (!ConfigHandler.altArrow)
             this.mc.getTextureManager().bindTexture(arrow);
         else
             this.mc.getTextureManager().bindTexture(altArrow);
         ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
-        double width = (scaledresolution.getScaledWidth() - 50) / 2;
+        double width = scaledresolution.getScaledWidth();
 
         GL11.glPushMatrix();
-        GL11.glTranslated(width + 25 + ConfigHandler.arrowX, 30 + ConfigHandler.arrowY, 0);
-        GL11.glRotatef((float) -direction, 0, 0, 1);
-        GL11.glTranslated(-25, -25, 0);
 
+        GL11.glTranslated(width / 2 + ConfigHandler.arrowX, arrowHeight / 2 + 5 + ConfigHandler.arrowY, 0);
+        GL11.glRotatef((float) -direction, 0, 0, 1);
+        GL11.glScaled(ConfigHandler.arrowSize, ConfigHandler.arrowSize, 1F);
+        GL11.glTranslatef(-arrowWidth / 2, -arrowHeight / 2, 0);
+
+        Tessellator tl = Tessellator.instance;
         tl.startDrawingQuads();
         tl.addVertexWithUV(0, 0, 0, 0, 0);
-        tl.addVertexWithUV(0, 50, 0, 0, 1);
-        tl.addVertexWithUV(50, 50, 0, 1, 1);
-        tl.addVertexWithUV(50, 0, 0, 1, 0);
+        tl.addVertexWithUV(0, arrowHeight, 0, 0, 1);
+        tl.addVertexWithUV(arrowWidth, arrowHeight, 0, 1, 1);
+        tl.addVertexWithUV(arrowWidth, 0, 0, 1, 0);
         tl.draw();
         GL11.glPopMatrix();
 
@@ -71,10 +76,15 @@ public class GuiPointer extends Gui {
         String blocks = Integer.toString(distancePL) + " Blocks";
         int color = dirY.equals("Below") ? Constants.RED : dirY.equals("Level") ? Constants.WHITE : Constants.GREEN;
         FontRenderer fr = this.mc.fontRenderer;
-        fr.drawString(blocks, ((scaledresolution.getScaledWidth() - fr.getStringWidth(blocks)) / 2) + ConfigHandler.arrowX,
-                60 + ConfigHandler.arrowY, Constants.WHITE);
-        fr.drawString(dirY, ((int)width + (fr.getStringWidth(dirY) / 2)) + ConfigHandler.arrowX,
-                70 + ConfigHandler.arrowY, color);
+
+        GL11.glPushMatrix();
+        GL11.glTranslated(width / 2 + ConfigHandler.arrowX,arrowHeight + (5 * ConfigHandler.arrowSize) + ConfigHandler.arrowY, 0);
+        GL11.glScaled(ConfigHandler.arrowSize, ConfigHandler.arrowSize, 1F);
+        GL11.glTranslatef(-fr.getStringWidth(blocks + " " + dirY), 0, 0);
+
+        fr.drawString(blocks + " - " + dirY, fr.getStringWidth(blocks + " " + dirY) / 2,
+                0, Constants.WHITE);
+        GL11.glPopMatrix();
 
 
     }

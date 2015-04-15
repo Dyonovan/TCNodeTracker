@@ -94,22 +94,42 @@ public class GuiConfig extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float f) {
 
-        drawDefaultBackground();
+        final int arrowWidth = 64;
+        final int arrowHeight= 64;
 
+        drawDefaultBackground();
         drawButtons();
+
+        if (!ConfigHandler.altArrow)
+            this.mc.getTextureManager().bindTexture(arrow);
+        else
+            this.mc.getTextureManager().bindTexture(altArrow);
+
+        GL11.glPushMatrix();
+        GL11.glTranslated(width / 2 + ConfigHandler.arrowX, arrowHeight/2 + 5 + ConfigHandler.arrowY, 0);
+        GL11.glScaled(ConfigHandler.arrowSize, ConfigHandler.arrowSize, 1F);
+        GL11.glTranslatef(-arrowWidth / 2, -arrowHeight / 2, 0);
+        Tessellator tl = Tessellator.instance;
+        tl.startDrawingQuads();
+        tl.addVertexWithUV(0, 0, 0, 0, 0);
+        tl.addVertexWithUV(0, arrowHeight, 0, 0, 1);
+        tl.addVertexWithUV(arrowWidth, arrowHeight, 0, 1, 1);
+        tl.addVertexWithUV(arrowWidth, 0, 0, 1, 0);
+        tl.draw();
+
+        GL11.glPopMatrix();
 
         FontRenderer fr = this.mc.fontRenderer;
 
         GL11.glPushMatrix();
-        GL11.glScalef((float) ConfigHandler.arrowSize, (float) ConfigHandler.arrowSize, 1F);
-        GL11.glTranslatef((float) ConfigHandler.arrowSize * 1, (float) ConfigHandler.arrowSize * 1, 1F);
-        fr.drawString("# Blocks", (width - fr.getStringWidth("# Blocks")) / 2 + ConfigHandler.arrowX,
-                60 + ConfigHandler.arrowY, Constants.WHITE);
-        fr.drawString("Below", (width - fr.getStringWidth("Below")) / 2 + ConfigHandler.arrowX,
-                70 + ConfigHandler.arrowY, Constants.WHITE);
+        GL11.glTranslated(width / 2 + ConfigHandler.arrowX, arrowHeight + (5 * ConfigHandler.arrowSize) + ConfigHandler.arrowY, 0);
+        GL11.glScaled(ConfigHandler.arrowSize, ConfigHandler.arrowSize, 1F);
+        GL11.glTranslatef(-fr.getStringWidth("# Blocks - Below"), 0, 0);
+        fr.drawString("# Blocks - Below", fr.getStringWidth("# Blocks - Below") / 2,
+                0, Constants.WHITE);
         GL11.glPopMatrix();
 
-        drawString(fr, "Size: " + Math.round(ConfigHandler.arrowSize * 100) + "%", ((width / 4) * 3) + 12,
+        fr.drawString("Size: " + Math.round(ConfigHandler.arrowSize * 100) + "%", ((width / 4) * 3) + 12,
                 height - 43, Constants.WHITE);
 
         super.drawScreen(mouseX, mouseY, f);
@@ -120,25 +140,6 @@ public class GuiConfig extends GuiScreen {
         super.drawDefaultBackground();
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-        if (!ConfigHandler.altArrow)
-            this.mc.getTextureManager().bindTexture(arrow);
-        else
-            this.mc.getTextureManager().bindTexture(altArrow);
-
-        GL11.glPushMatrix();
-        GL11.glTranslated(((width / 2) - 25) + ConfigHandler.arrowX, 5 + ConfigHandler.arrowY, 0);
-        //GL11.glTranslated(-25, -25, 0);
-        GL11.glScalef((float)ConfigHandler.arrowSize, (float)ConfigHandler.arrowSize, 1F);
-        Tessellator tl = Tessellator.instance;
-        tl.startDrawingQuads();
-        tl.addVertexWithUV(0, 0, 0, 0, 0);
-        tl.addVertexWithUV(0, 50, 0, 0, 1);
-        tl.addVertexWithUV(50, 50, 0, 1, 1);
-        tl.addVertexWithUV(50, 0, 0, 1, 0);
-        tl.draw();
-
-        GL11.glPopMatrix();
     }
 
     @Override
