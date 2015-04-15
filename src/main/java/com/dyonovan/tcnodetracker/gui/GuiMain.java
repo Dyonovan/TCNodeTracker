@@ -265,6 +265,8 @@ public class GuiMain extends GuiScreen {
                 comparator = AspectLoc.getDistComparator();
         }
         Collections.sort(aspectList, comparator);
+        if (sortBy != Constants.DISTANCE)
+            Collections.reverse(aspectList);
         low = 0;
         high = (aspectList.size() > 10) ? 10 : aspectList.size();
         guiButtons();
