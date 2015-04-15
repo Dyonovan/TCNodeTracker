@@ -22,15 +22,25 @@ public class GuiConfig extends GuiScreen {
     public static final int ARROW_SIZE_SMALL = 6;
     public static final int ARROW_SIZE_LARGE = 7;
 
+    boolean moving;
+    int startX;
+    int startY;
+    int startArrowX;
+    int startArrowY;
+
     private static final ResourceLocation arrow = new ResourceLocation("tcnodetracker:textures/gui/arrow.png");
     private static final ResourceLocation altArrow = new ResourceLocation("tcnodetracker:textures/gui/arrow2.png");
 
     public GuiConfig() { }
 
-/*    @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
-    }*/
+        moving = false;
+        startX = 0;
+        startY = 0;
+        startArrowX = 0;
+        startArrowY = 0;
+    }
 
     @SuppressWarnings("unchecked")
     private void drawButtons() {
@@ -170,5 +180,49 @@ public class GuiConfig extends GuiScreen {
         ConfigHandler.config.save();
 
         super.onGuiClosed();
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+        if (mouseButton != 0) {
+            return;
+        }
+
+        //final int arrowWidth = 64;
+        final int arrowHeight = 64;
+
+        int baseX = width / 2;
+        int baseY = arrowHeight / 2 + 5;
+
+        final int clickRadius = 32;
+
+        if (mouseX >= baseX + ConfigHandler.arrowX - clickRadius && mouseX <= baseX + ConfigHandler.arrowX + clickRadius && mouseY >= baseY + ConfigHandler.arrowY - clickRadius && mouseY <= baseY + ConfigHandler.arrowY + clickRadius
+                ) {
+            moving = true;
+            startX = mouseX;
+            startY = mouseY;
+            startArrowX = ConfigHandler.arrowX;
+            startArrowY = ConfigHandler.arrowY;
+        } else {
+            moving = false;
+        }
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+    protected void mouseClickMove(int mouseX, int mouseY, int mouseButton, long p_146273_4_) {
+        if (!moving || mouseButton != 0) {
+            return;
+        }
+
+        ConfigHandler.arrowX = startArrowX + mouseX - startX;
+        ConfigHandler.arrowY = startArrowY + mouseY - startY;
+        super.mouseClickMove(mouseX, mouseY, mouseButton, p_146273_4_);
+    }
+
+    @Override
+    protected void mouseMovedOrUp(int mouseX, int mouseY, int mouseButton) {
+        moving = false;
+        super.mouseMovedOrUp(mouseX, mouseY, mouseButton);
     }
 }
