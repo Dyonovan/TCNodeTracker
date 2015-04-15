@@ -5,11 +5,11 @@ import com.dyonovan.tcnodetracker.events.ClientConnectionEvent;
 import com.dyonovan.tcnodetracker.events.KeyInputEvent;
 import com.dyonovan.tcnodetracker.events.RightClickEvent;
 import com.dyonovan.tcnodetracker.gui.GuiPointer;
+import com.dyonovan.tcnodetracker.handlers.ConfigHandler;
 import com.dyonovan.tcnodetracker.lib.Constants;
 import com.dyonovan.tcnodetracker.lib.DimList;
 import com.dyonovan.tcnodetracker.lib.NodeList;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -20,22 +20,23 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
+@SuppressWarnings("unused")
 @Mod(name = Constants.MODNAME, modid = Constants.MODID, version = Constants.VERSION, dependencies = Constants.DEPENDENCIES,
         acceptableRemoteVersions = "*")
 
 public class TCNodeTracker {
 
     public static String hostName;
-    public static ArrayList<NodeList> nodelist = new ArrayList<NodeList>();
-    public static boolean doGui = false;//, isTHLoaded;
+    public static ArrayList<NodeList> nodelist = new ArrayList<>();
+    public static boolean doGui = false;
     public static int xMarker, yMarker, zMarker;
-    public static List<DimList> dims = new ArrayList<DimList>();
+    public static List<DimList> dims = new ArrayList<>();
 
     @Instance(Constants.MODID)
     public static TCNodeTracker instance;
@@ -44,7 +45,8 @@ public class TCNodeTracker {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
 
-        //isTHLoaded = Loader.isModLoaded("ThaumicHorizons");
+        ConfigHandler.init(new Configuration(event.getSuggestedConfigurationFile()));
+
         MinecraftForge.EVENT_BUS.register(new RightClickEvent());
         FMLCommonHandler.instance().bus().register(new ClientConnectionEvent());
         FMLCommonHandler.instance().bus().register(new KeyInputEvent());
