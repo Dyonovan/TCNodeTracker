@@ -22,7 +22,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

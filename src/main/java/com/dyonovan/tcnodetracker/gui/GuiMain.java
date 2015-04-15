@@ -92,18 +92,22 @@ public class GuiMain extends GuiScreen {
             x += 14;
         }
 
-        this.buttonList.add(new GuiButton((high * 2), start + 350, 11, 70, 16, "Clear Arrow"));
+        this.buttonList.add(new GuiButton(buttonList.size(), start + 350, 5, 70, 20, "Clear Arrow"));
+        this.buttonList.add(new GuiButton(buttonList.size(), start + 350, 27, 70, 20, "Config"));
         this.updateScreen();
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
 
-        if (button.id == this.buttonList.size() - 1) {
+        if (button.id == this.buttonList.size() - 2) {
             TCNodeTracker.doGui = false;
             TCNodeTracker.yMarker = -1;
             this.mc.displayGuiScreen(null);
             aspectList.clear();
+        } else if (button.id == this.buttonList.size() - 1) {
+            this.mc.displayGuiScreen(null);
+            Minecraft.getMinecraft().displayGuiScreen(new GuiConfig());
         } else if (button.id % 2 == 0) {
 
             int i = button.id / 2;
@@ -139,6 +143,7 @@ public class GuiMain extends GuiScreen {
 
     }
 
+    @Override
     protected void keyTyped(char key, int i) {
         if (i == KeyBindings.aspectMenu.getKeyCode() || i == 1) {
             this.mc.displayGuiScreen(null);
@@ -150,11 +155,13 @@ public class GuiMain extends GuiScreen {
         return false;
     }
 
+    @Override
     public void updateScreen() {
         super.updateScreen();
 
     }
 
+    @Override
     public void drawDefaultBackground() {
         super.drawDefaultBackground();
 
@@ -390,18 +397,22 @@ public class GuiMain extends GuiScreen {
             if (isInBounds(x, y, start + 140, l - 5, start + 186, l + 8)) {
                 List<String> toolTip = new ArrayList<>();
                 toolTip.add("\u00a7" + Integer.toHexString(2) + "Compound Aspects");
-                for (Map.Entry<String, Integer> node : a.compound.entrySet()) {
+                for (Map.Entry<String, Integer> node : a.compound.entrySet())
                     toolTip.add(node.getKey().toUpperCase() + ": " + node.getValue());
-                }
                 drawHoveringText(toolTip, x, y, fontRendererObj);
             } else if (isInBounds(x, y, start + 2, l - 5, start + 40, l + 8)) {
                 List<String> toolTip = new ArrayList<>();
                 toolTip.add("\u00a7" + Integer.toHexString(2) + "Last Scanned");
-                if (a.date != null) {
+                if (a.date != null)
                     toolTip.add(new SimpleDateFormat("HH:mm:ss yyyy.MM.dd").format(a.date));
-                }
+                else toolTip.add("Unknown");
                 drawHoveringText(toolTip, x, y, fontRendererObj);
             }
+
+            GL11.glPushMatrix();
+            GL11.glDisable(GL11.GL_LIGHTING);
+            GL11.glColor3f(1, 1, 1);
+            GL11.glPopMatrix();
 
             l += 14;
         }
@@ -410,7 +421,7 @@ public class GuiMain extends GuiScreen {
         if (low > 0)
             this.drawTexturedModalRect((this.width - 50) / 2, 210, 1, 1, 15, 17);
         if (high != aspectList.size())
-        this.drawTexturedModalRect((this.width + 32) / 2, 211, 17, 1, 32, 17);
+            this.drawTexturedModalRect((this.width + 32) / 2, 211, 17, 1, 32, 17);
         this.drawTexturedModalRect(start, 209, 91, 41, 17, 17);
         this.drawTexturedModalRect(start + 102, 209, 91, 25, 17, 17);
 
