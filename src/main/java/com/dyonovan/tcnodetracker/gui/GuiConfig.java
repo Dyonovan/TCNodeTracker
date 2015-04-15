@@ -17,8 +17,11 @@ public class GuiConfig extends GuiScreen {
     public static final int DOWN = 1;
     public static final int LEFT = 2;
     public static final int RIGHT = 3;
+    public static final int RESET = 4;
+    public static final int ARROW_TYPE = 5;
 
     private static final ResourceLocation arrow = new ResourceLocation("tcnodetracker:textures/gui/arrow.png");
+    private static final ResourceLocation altArrow = new ResourceLocation("tcnodetracker:textures/gui/arrow2.png");
 
     public GuiConfig() { }
 
@@ -27,10 +30,12 @@ public class GuiConfig extends GuiScreen {
     public void initGui() {
         buttonList.clear();
 
-        buttonList.add(new GuiButton(UP, (width / 2) - 6, height - 75, 12, 20, "^"));
-        buttonList.add(new GuiButton(DOWN, (width / 2) - 6, height - 25, 12, 20, "v"));
-        buttonList.add(new GuiButton(LEFT, (width / 2) - 24, height - 50, 12, 20, "<"));
-        buttonList.add(new GuiButton(RIGHT, (width / 2) + 12, height - 50, 12, 20, ">"));
+        buttonList.add(new GuiButton(UP, (width / 2) - 17, height - 75, 35, 20, "UP"));
+        buttonList.add(new GuiButton(DOWN, (width / 2) - 17, height - 25, 35, 20, "DOWN"));
+        buttonList.add(new GuiButton(LEFT, (width / 2) - 61, height - 50, 35, 20, "LEFT"));
+        buttonList.add(new GuiButton(RIGHT, (width / 2) + 26, height - 50, 35, 20, "RIGHT"));
+        buttonList.add(new GuiButton(RESET, (width / 2) - 17, height - 50, 35, 20, "RESET"));
+        buttonList.add(new GuiButton(ARROW_TYPE, (width / 4) - 70, height - 50, 70, 20, "Arrow Type"));
 
         updateScreen();
     }
@@ -50,6 +55,15 @@ public class GuiConfig extends GuiScreen {
             case RIGHT:
                 ConfigHandler.arrowX += 1;
                 break;
+            case RESET:
+                ConfigHandler.arrowX = 0;
+                ConfigHandler.arrowY = 0;
+                break;
+            case ARROW_TYPE:
+                if (ConfigHandler.altArrow)
+                    ConfigHandler.altArrow = false;
+                else if (!ConfigHandler.altArrow)
+                    ConfigHandler.altArrow = true;
         }
     }
 
@@ -73,7 +87,10 @@ public class GuiConfig extends GuiScreen {
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-        this.mc.getTextureManager().bindTexture(arrow);
+        if (!ConfigHandler.altArrow)
+            this.mc.getTextureManager().bindTexture(arrow);
+        else
+            this.mc.getTextureManager().bindTexture(altArrow);
 
         GL11.glPushMatrix();
         GL11.glTranslated(((width / 2) - 25) + ConfigHandler.arrowX, 5 + ConfigHandler.arrowY, 0);
@@ -107,10 +124,14 @@ public class GuiConfig extends GuiScreen {
 
         Property arrowX = ConfigHandler.config.get("Arrow Location", "XCoord", 0);
         Property arrowY = ConfigHandler.config.get("Arrow Location", "YCoord", 0);
+        Property arrowType = ConfigHandler.config.get("Arrow Type", "Use Alt Arrow Texture", false);
 
         arrowX.set(ConfigHandler.arrowX);
         arrowY.set(ConfigHandler.arrowY);
+        arrowType.set(ConfigHandler.altArrow);
 
         ConfigHandler.config.save();
+
+        super.onGuiClosed();
     }
 }

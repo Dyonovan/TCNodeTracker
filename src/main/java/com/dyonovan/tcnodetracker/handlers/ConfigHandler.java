@@ -8,6 +8,7 @@ import java.io.File;
 public class ConfigHandler {
 
     public static int arrowX, arrowY;
+    public static boolean altArrow;
     public static Configuration config;
 
     public static void init(File file) {
@@ -17,6 +18,8 @@ public class ConfigHandler {
 
         arrowX      = config.get("Arrow Location", "XCoord", 0).getInt();
         arrowY      = config.get("Arrow Location", "YCoord", 0).getInt();
+
+        altArrow    = config.get("Arrow Type", "Use Alt Arrow Texture", false).getBoolean();
 
         config.save();
     }

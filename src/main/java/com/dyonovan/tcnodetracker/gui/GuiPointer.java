@@ -19,6 +19,7 @@ import thaumcraft.api.IGoggles;
 public class GuiPointer extends Gui {
 
     private static final ResourceLocation arrow = new ResourceLocation("tcnodetracker:textures/gui/arrow.png");
+    private static final ResourceLocation altArrow = new ResourceLocation("tcnodetracker:textures/gui/arrow2.png");
     private Minecraft mc;
 
 
@@ -45,7 +46,10 @@ public class GuiPointer extends Gui {
                 TCNodeTracker.zMarker - this.mc.thePlayer.posZ))) + this.mc.thePlayer.rotationYaw;
 
         Tessellator tl = Tessellator.instance;
-        this.mc.getTextureManager().bindTexture(arrow);
+        if (!ConfigHandler.altArrow)
+            this.mc.getTextureManager().bindTexture(arrow);
+        else
+            this.mc.getTextureManager().bindTexture(altArrow);
         ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
         double width = (scaledresolution.getScaledWidth() - 50) / 2;
 
