@@ -24,7 +24,7 @@ public class GuiMain extends GuiScreen {
     public static ArrayList<AspectLoc> aspectList = new ArrayList<>();
     private int display, start, low, high;
     private int dimID = 0, dimIndex;
-    private String dimName, currentAspect;
+    private String dimName, currentAspect, lastSort;
 
     public GuiMain() {
     }
@@ -45,6 +45,7 @@ public class GuiMain extends GuiScreen {
     public void initGui() {
         display = 425;
         start = (this.width - display) / 2;
+        lastSort = Constants.DISTANCE;
 
         TCNodeTracker.dims.clear();
         for (int i : DimensionManager.getStaticDimensionIDs()) {
@@ -118,8 +119,7 @@ public class GuiMain extends GuiScreen {
                         }
                         TCNodeTracker.nodelist.remove(k);
                         JsonUtils.writeJson();
-                        aspectList.clear();
-                        this.mc.displayGuiScreen(null);
+                        sortNodes(lastSort);
                         return;
                     }
                 }
@@ -230,7 +230,7 @@ public class GuiMain extends GuiScreen {
 
     private void sortNodes(final String sortBy) {
         aspectList.clear();
-
+        lastSort = sortBy;
         for (NodeList n : TCNodeTracker.nodelist) {
             if (currentAspect.equals("ALL") && n.dim == dimID) {
                 getNodes(n);
