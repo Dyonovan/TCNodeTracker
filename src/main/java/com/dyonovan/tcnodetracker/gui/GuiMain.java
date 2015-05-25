@@ -86,8 +86,8 @@ public class GuiMain extends GuiScreen {
         this.buttonList.clear();
         for (int j = low; j < (high * 2); j += 2) {
 
-            this.buttonList.add(new GuiButton(j, start + 410, x, 20, 10, "Del"));
-            this.buttonList.add(new GuiButton(j + 1, start + 380, x, 30, 10, "Mark"));
+            this.buttonList.add(new GuiButton(j, start + 400, x, 20, 10, "Del"));
+            this.buttonList.add(new GuiButton(j + 1, start + 370, x, 30, 10, "Mark"));
 
             x += 14;
         }
@@ -321,18 +321,6 @@ public class GuiMain extends GuiScreen {
 
         String s1 = "Click aspect to get node list";
         this.fontRendererObj.drawString(s1, this.width / 2 - this.fontRendererObj.getStringWidth(s1) / 2, 40, Constants.WHITE);
-        /*s1 = "(N)ormal";
-        this.fontRendererObj.drawString(s1, start, 1, Constants.WHITE);
-        s1 = "(U)nstable";
-        this.fontRendererObj.drawString(s1, start, 9, Constants.WHITE);
-        s1 = "(D)ark";
-        this.fontRendererObj.drawString(s1, start, 17, Constants.WHITE);
-        s1 = "(T)ainted";
-        this.fontRendererObj.drawString(s1, start, 25, Constants.WHITE);
-        s1 = "(H)ungry";
-        this.fontRendererObj.drawString(s1, start, 33, Constants.WHITE);
-        s1 = "(P)ure";
-        this.fontRendererObj.drawString(s1, start, 41, Constants.WHITE);*/
 
         drawRect(start, 50, start + display, 52, -9408400);
         drawRect(start, 64, start + display, 66, -9408400);
@@ -341,9 +329,9 @@ public class GuiMain extends GuiScreen {
         this.fontRendererObj.drawString("X", start + 50, 55, Constants.WHITE);
         this.fontRendererObj.drawString("Y", start + 80, 55, Constants.WHITE);
         this.fontRendererObj.drawString("Z", start + 110, 55, Constants.WHITE);
-        this.fontRendererObj.drawString("Type", start + 140, 55, Constants.WHITE);
+        this.fontRendererObj.drawString("Type", start + 130, 55, Constants.WHITE);
         s1 = "Aer  Aqua  Ignis  Ordo  Perd  Terra";
-        this.fontRendererObj.drawString(s1, start + 188, 55, Constants.WHITE);
+        this.fontRendererObj.drawString(s1, start + 178, 55, Constants.WHITE);
 
         for (AspectLoc a : aspectList.subList(low, high)) {
             int color;
@@ -372,25 +360,25 @@ public class GuiMain extends GuiScreen {
 
             }*/
             s2 = a.type.substring(0, 1);
-            this.fontRendererObj.drawString(s2, start + (152 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
+            this.fontRendererObj.drawString(s2, start + (142 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = a.hasAer > 0 ? Integer.toString(a.hasAer) : "";
-            this.fontRendererObj.drawString(s2, start + (195 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
+            this.fontRendererObj.drawString(s2, start + (185 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = a.hasAqua > 0 ? Integer.toString(a.hasAqua) : "";
-            this.fontRendererObj.drawString(s2, start + (226 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
+            this.fontRendererObj.drawString(s2, start + (216 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = a.hasIgnis > 0 ? Integer.toString(a.hasIgnis) : "";
-            this.fontRendererObj.drawString(s2, start + (258 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
+            this.fontRendererObj.drawString(s2, start + (248 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = a.hasOrdo > 0 ? Integer.toString(a.hasOrdo) : "";
-            this.fontRendererObj.drawString(s2, start + (290 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
+            this.fontRendererObj.drawString(s2, start + (280 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = a.hasPerdito > 0 ? Integer.toString(a.hasPerdito) : "";
-            this.fontRendererObj.drawString(s2, start + (322 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
+            this.fontRendererObj.drawString(s2, start + (312 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = a.hasTerra > 0 ? Integer.toString(a.hasTerra) : "";
-            this.fontRendererObj.drawString(s2, start + (358 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
+            this.fontRendererObj.drawString(s2, start + (348 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
 
 
@@ -408,7 +396,7 @@ public class GuiMain extends GuiScreen {
         l = 70;
         for (AspectLoc a : aspectList.subList(low, high)) {
 
-            if (isInBounds(x, y, start + 140, l - 5, start + 186, l + 8)) {
+            if (isInBounds(x, y, start + 130, l - 5, start + 156, l + 8)) {
                 List<String> toolTip = new ArrayList<>();
                 toolTip.add("\u00a7" + Integer.toHexString(2) + "Compound Aspects");
                 if (a.compound.size() >0) {
