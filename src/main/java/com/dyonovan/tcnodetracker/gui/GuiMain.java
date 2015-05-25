@@ -391,22 +391,19 @@ public class GuiMain extends GuiScreen {
             //StatCollector.translateToLocal("nodetype." + ((INode)var32).getNodeType() + ".name")
             if (isInBounds(x, y, start + 130, l - 5, start + 156, l + 8)) {
                 List<String> toolTip = new ArrayList<>();
-                toolTip.add("\u00a7" + Integer.toHexString(2) + "Compound Aspects");
+                toolTip.add("\u00a7" + Integer.toHexString(2) + "Compound Aspects:");
                 if (a.compound.size() >0) {
                     for (Map.Entry<String, Integer> node : a.compound.entrySet())
                         toolTip.add(node.getKey().toUpperCase() + ": " + node.getValue());
                 } else {
                     toolTip.add("None");
                 }
-                toolTip.add("\u00a7" + Integer.toHexString(2) + "Node Type");
-                String type;
-                if  (a.mod == null || a.mod.equals("BLANK"))
-                    type = StatCollector.translateToLocal("nodetype." + a.type + ".name");//a.type;
-                else
-                    type = StatCollector.translateToLocal("nodetype." + a.type + ".name") +
-                            " / \u00a7" + Integer.toHexString(4) + "State: " +
-                            "\u00a7" + Integer.toHexString(15) + StatCollector.translateToLocal("nodemod." + a.mod + ".name");
-                toolTip.add(type);
+                //toolTip.add("\u00a7" + Integer.toHexString(2) + "Node Type");
+                toolTip.add(StatCollector.translateToLocal("\u00a7" + Integer.toHexString(2) + "Type: " +
+                        "\u00a7" + Integer.toHexString(15) + StatCollector.translateToLocal("nodetype." + a.type + ".name")));
+                if  (a.mod != null && !a.mod.equals("BLANK"))
+                    toolTip.add("\u00a7" + Integer.toHexString(4) + "State: " +
+                            "\u00a7" + Integer.toHexString(15) + StatCollector.translateToLocal("nodemod." + a.mod + ".name"));
                 drawHoveringText(toolTip, x, y, fontRendererObj);
             } else if (isInBounds(x, y, start + 2, l - 5, start + 40, l + 8)) {
                 List<String> toolTip = new ArrayList<>();
