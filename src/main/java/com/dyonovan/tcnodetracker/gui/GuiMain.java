@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.DimensionManager;
 import org.lwjgl.opengl.GL11;
@@ -86,14 +87,14 @@ public class GuiMain extends GuiScreen {
         this.buttonList.clear();
         for (int j = low; j < (high * 2); j += 2) {
 
-            this.buttonList.add(new GuiButton(j, start + 400, x, 20, 10, "Del"));
-            this.buttonList.add(new GuiButton(j + 1, start + 370, x, 30, 10, "Mark"));
+            this.buttonList.add(new GuiButton(j, start + 400, x, 20, 10, StatCollector.translateToLocal("btn.delete.name")));
+            this.buttonList.add(new GuiButton(j + 1, start + 370, x, 30, 10, StatCollector.translateToLocal("btn.mark.name")));
 
             x += 14;
         }
 
-        this.buttonList.add(new GuiButton(buttonList.size(), start + 350, 5, 70, 20, "Clear Arrow"));
-        this.buttonList.add(new GuiButton(buttonList.size(), start + 350, 27, 70, 20, "Config"));
+        this.buttonList.add(new GuiButton(buttonList.size(), start + 350, 5, 70, 20, StatCollector.translateToLocal("btn.cleararrow.name")));
+        this.buttonList.add(new GuiButton(buttonList.size(), start + 350, 27, 70, 20, StatCollector.translateToLocal("btn.config.name")));
         this.updateScreen();
     }
 
@@ -319,17 +320,17 @@ public class GuiMain extends GuiScreen {
 
         this.fontRendererObj.drawString(dimName, start + 20 +(80 - this.fontRendererObj.getStringWidth(dimName)) / 2, 214, Constants.WHITE);
 
-        String s1 = "Click aspect to get node list";
+        String s1 = StatCollector.translateToLocal("str.instruction.name");
         this.fontRendererObj.drawString(s1, this.width / 2 - this.fontRendererObj.getStringWidth(s1) / 2, 40, Constants.WHITE);
 
         drawRect(start, 50, start + display, 52, -9408400);
         drawRect(start, 64, start + display, 66, -9408400);
 
-        this.fontRendererObj.drawString("Dist", start + 2, 55, Constants.WHITE);
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("str.distance.name"), start + 2, 55, Constants.WHITE);
         this.fontRendererObj.drawString("X", start + 50, 55, Constants.WHITE);
         this.fontRendererObj.drawString("Y", start + 80, 55, Constants.WHITE);
         this.fontRendererObj.drawString("Z", start + 110, 55, Constants.WHITE);
-        this.fontRendererObj.drawString("Type", start + 130, 55, Constants.WHITE);
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("str.type.name"), start + 130, 55, Constants.WHITE);
         s1 = "Aer  Aqua  Ignis  Ordo  Perd  Terra";
         this.fontRendererObj.drawString(s1, start + 178, 55, Constants.WHITE);
 
@@ -350,15 +351,6 @@ public class GuiMain extends GuiScreen {
             s2 = Integer.toString(a.z);
             this.fontRendererObj.drawString(s2, start + (112 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
-            /*if (a.type == null) s2 = "";
-            else {
-                String[] type;
-                    type = a.type.split("-");
-                s2 = "";
-                for (String aType : type)
-                        s2 += (s2.equals("")) ? aType.charAt(0) : "/" + aType.trim().charAt(0);
-
-            }*/
             s2 = a.type.substring(0, 1);
             this.fontRendererObj.drawString(s2, start + (142 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
@@ -384,7 +376,7 @@ public class GuiMain extends GuiScreen {
 
             GL11.glPushMatrix();
             GL11.glDisable(GL11.GL_LIGHTING);
-            //GL11.glColor3f(1, 1, 1);
+            GL11.glColor3f(1, 1, 1);
 
             drawRect(start, l + 9, start + display, l + 10, -9408400);
 
@@ -396,6 +388,7 @@ public class GuiMain extends GuiScreen {
         l = 70;
         for (AspectLoc a : aspectList.subList(low, high)) {
 
+            //StatCollector.translateToLocal("nodetype." + ((INode)var32).getNodeType() + ".name")
             if (isInBounds(x, y, start + 130, l - 5, start + 156, l + 8)) {
                 List<String> toolTip = new ArrayList<>();
                 toolTip.add("\u00a7" + Integer.toHexString(2) + "Compound Aspects");
@@ -408,9 +401,11 @@ public class GuiMain extends GuiScreen {
                 toolTip.add("\u00a7" + Integer.toHexString(2) + "Node Type");
                 String type;
                 if  (a.mod == null || a.mod.equals("BLANK"))
-                    type = a.type;
+                    type = StatCollector.translateToLocal("nodetype." + a.type + ".name");//a.type;
                 else
-                    type = a.type + " - State: " + a.mod;
+                    type = StatCollector.translateToLocal("nodetype." + a.type + ".name") +
+                            " / \u00a7" + Integer.toHexString(4) + "State: " +
+                            "\u00a7" + Integer.toHexString(15) + StatCollector.translateToLocal("nodemod." + a.mod + ".name");
                 toolTip.add(type);
                 drawHoveringText(toolTip, x, y, fontRendererObj);
             } else if (isInBounds(x, y, start + 2, l - 5, start + 40, l + 8)) {

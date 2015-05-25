@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Property;
 import org.lwjgl.opengl.GL11;
 
@@ -55,12 +56,12 @@ public class GuiConfig extends GuiScreen {
 
         buttonList.clear();
 
-        buttonList.add(new GuiButton(UP, (width / 2) - 17, height - 75, 35, 20, "UP"));
-        buttonList.add(new GuiButton(DOWN, (width / 2) - 17, height - 25, 35, 20, "DOWN"));
-        buttonList.add(new GuiButton(LEFT, (width / 2) - 61, height - 50, 35, 20, "LEFT"));
-        buttonList.add(new GuiButton(RIGHT, (width / 2) + 26, height - 50, 35, 20, "RIGHT"));
-        buttonList.add(new GuiButton(RESET, (width / 2) - 17, height - 50, 35, 20, "RESET"));
-        buttonList.add(new GuiButton(ARROW_TYPE, (width / 4) - 70, height - 50, 70, 20, "Arrow Type"));
+        buttonList.add(new GuiButton(UP, (width / 2) - 17, height - 75, 35, 20, StatCollector.translateToLocal("btn.up.name")));
+                buttonList.add(new GuiButton(DOWN, (width / 2) - 17, height - 25, 35, 20, StatCollector.translateToLocal("btn.down.name")));
+        buttonList.add(new GuiButton(LEFT, (width / 2) - 61, height - 50, 35, 20, StatCollector.translateToLocal("btn.left.name")));
+        buttonList.add(new GuiButton(RIGHT, (width / 2) + 26, height - 50, 35, 20, StatCollector.translateToLocal("btn.right.name")));
+        buttonList.add(new GuiButton(RESET, (width / 2) - 17, height - 50, 35, 20, StatCollector.translateToLocal("btn.reset.name")));
+        buttonList.add(new GuiButton(ARROW_TYPE, (width / 4) - 70, height - 50, 70, 20, StatCollector.translateToLocal("btn.arrowtype.name")));
         buttonList.add(arrowSmall);
         buttonList.add(arrowLarge);
 
@@ -134,8 +135,9 @@ public class GuiConfig extends GuiScreen {
         GL11.glPushMatrix();
         GL11.glTranslated(width / 2 + ConfigHandler.arrowX, arrowHeight + (5 * ConfigHandler.arrowSize) + ConfigHandler.arrowY, 0);
         GL11.glScaled(ConfigHandler.arrowSize, ConfigHandler.arrowSize, 1F);
-        GL11.glTranslatef(-fr.getStringWidth("# Blocks - Below"), 0, 0);
-        fr.drawString("# Blocks - Below", fr.getStringWidth("# Blocks - Below") / 2,
+        GL11.glTranslatef(-fr.getStringWidth(StatCollector.translateToLocal("str.configarrow.name")), 0, 0);
+        fr.drawString(StatCollector.translateToLocal("str.configarrow.name"),
+                fr.getStringWidth(StatCollector.translateToLocal("str.configarrow.name")) / 2,
                 0, Constants.WHITE);
         GL11.glPopMatrix();
 

@@ -10,6 +10,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import org.lwjgl.opengl.GL11;
@@ -72,8 +73,10 @@ public class GuiPointer extends Gui {
         GL11.glPopMatrix();
 
         int distancePL = (int) Math.round(this.mc.thePlayer.getDistance(TCNodeTracker.xMarker, mc.thePlayer.posY, TCNodeTracker.zMarker));
-        String dirY = mc.thePlayer.posY > TCNodeTracker.yMarker ? "Below" : mc.thePlayer.posY == TCNodeTracker.yMarker ? "Level" : "Above";
-        String blocks = Integer.toString(distancePL) + " Blocks";
+        String dirY = mc.thePlayer.posY > TCNodeTracker.yMarker ? StatCollector.translateToLocal("str.below.name") :
+                mc.thePlayer.posY == TCNodeTracker.yMarker ? StatCollector.translateToLocal("str.level.name") :
+                StatCollector.translateToLocal("str.above.name");
+        String blocks = Integer.toString(distancePL) + StatCollector.translateToLocal("str.blocks.name");
         int color = dirY.equals("Below") ? Constants.RED : dirY.equals("Level") ? Constants.WHITE : Constants.GREEN;
         FontRenderer fr = this.mc.fontRenderer;
 
