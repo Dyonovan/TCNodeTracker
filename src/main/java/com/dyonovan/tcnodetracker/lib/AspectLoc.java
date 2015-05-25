@@ -8,11 +8,11 @@ public class AspectLoc {
 
     public int x, y, z, distance, dimID;
     public int hasAer, hasOrdo, hasTerra, hasPerdito, hasIgnis, hasAqua;
-    public String type;
+    public String type, mod;
     public HashMap<String, Integer> compound;
     public Date date;
 
-    public AspectLoc(int x, int y, int z, int dimID, Date date, int distance, String type, int hasAer, int hasAqua, int hasIgnis,
+    public AspectLoc(int x, int y, int z, int dimID, Date date, int distance, String type, String mod, int hasAer, int hasAqua, int hasIgnis,
                      int hasOrdo, int hasPerdito, int hasTerra, HashMap<String, Integer> compound) {
         this.x = x;
         this.y = y;
@@ -21,6 +21,7 @@ public class AspectLoc {
         this.date = date;
         this.distance = distance;
         this.type = type;
+        this.mod = mod;
         this.hasAer = hasAer;
         this.hasAqua = hasAqua;
         this.hasIgnis = hasIgnis;

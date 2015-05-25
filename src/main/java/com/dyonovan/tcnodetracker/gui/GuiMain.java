@@ -169,7 +169,6 @@ public class GuiMain extends GuiScreen {
         this.mc.getTextureManager().bindTexture(nodes);
         this.drawTexturedModalRect((this.width - 204) / 2, 1, 0, 0, 204, 35);
         drawRect(start + 20, 210, start + 100, 225, -9408400);
-
     }
 
     public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
@@ -310,7 +309,7 @@ public class GuiMain extends GuiScreen {
 
         aspectList.add(new AspectLoc(nodes.x, nodes.y, nodes.z, nodes.dim, nodes.date,
                 (int) Math.round(mc.thePlayer.getDistance(nodes.x, mc.thePlayer.posY, nodes.z)),
-                nodes.type, air, water, fire, order, entropy, earth, compound));
+                nodes.type, nodes.mod, air, water, fire, order, entropy, earth, compound));
     }
 
     public void drawScreen(int x, int y, float f) {
@@ -322,7 +321,7 @@ public class GuiMain extends GuiScreen {
 
         String s1 = "Click aspect to get node list";
         this.fontRendererObj.drawString(s1, this.width / 2 - this.fontRendererObj.getStringWidth(s1) / 2, 40, Constants.WHITE);
-        s1 = "(N)ormal";
+        /*s1 = "(N)ormal";
         this.fontRendererObj.drawString(s1, start, 1, Constants.WHITE);
         s1 = "(U)nstable";
         this.fontRendererObj.drawString(s1, start, 9, Constants.WHITE);
@@ -333,7 +332,7 @@ public class GuiMain extends GuiScreen {
         s1 = "(H)ungry";
         this.fontRendererObj.drawString(s1, start, 33, Constants.WHITE);
         s1 = "(P)ure";
-        this.fontRendererObj.drawString(s1, start, 41, Constants.WHITE);
+        this.fontRendererObj.drawString(s1, start, 41, Constants.WHITE);*/
 
         drawRect(start, 50, start + display, 52, -9408400);
         drawRect(start, 64, start + display, 66, -9408400);
@@ -363,7 +362,7 @@ public class GuiMain extends GuiScreen {
             s2 = Integer.toString(a.z);
             this.fontRendererObj.drawString(s2, start + (112 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
-            if (a.type == null) s2 = "";
+            /*if (a.type == null) s2 = "";
             else {
                 String[] type;
                     type = a.type.split("-");
@@ -371,7 +370,8 @@ public class GuiMain extends GuiScreen {
                 for (String aType : type)
                         s2 += (s2.equals("")) ? aType.charAt(0) : "/" + aType.trim().charAt(0);
 
-            }
+            }*/
+            s2 = a.type.substring(0, 1);
             this.fontRendererObj.drawString(s2, start + (152 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
             s2 = a.hasAer > 0 ? Integer.toString(a.hasAer) : "";
@@ -392,13 +392,38 @@ public class GuiMain extends GuiScreen {
             s2 = a.hasTerra > 0 ? Integer.toString(a.hasTerra) : "";
             this.fontRendererObj.drawString(s2, start + (358 - (this.fontRendererObj.getStringWidth(s2) / 2)), l, color);
 
+
+
+            GL11.glPushMatrix();
+            GL11.glDisable(GL11.GL_LIGHTING);
+            //GL11.glColor3f(1, 1, 1);
+
             drawRect(start, l + 9, start + display, l + 10, -9408400);
+
+            GL11.glPopMatrix();
+
+            l += 14;
+        }
+
+        l = 70;
+        for (AspectLoc a : aspectList.subList(low, high)) {
 
             if (isInBounds(x, y, start + 140, l - 5, start + 186, l + 8)) {
                 List<String> toolTip = new ArrayList<>();
                 toolTip.add("\u00a7" + Integer.toHexString(2) + "Compound Aspects");
-                for (Map.Entry<String, Integer> node : a.compound.entrySet())
-                    toolTip.add(node.getKey().toUpperCase() + ": " + node.getValue());
+                if (a.compound.size() >0) {
+                    for (Map.Entry<String, Integer> node : a.compound.entrySet())
+                        toolTip.add(node.getKey().toUpperCase() + ": " + node.getValue());
+                } else {
+                    toolTip.add("None");
+                }
+                toolTip.add("\u00a7" + Integer.toHexString(2) + "Node Type");
+                String type;
+                if  (a.mod == null || a.mod.equals("BLANK"))
+                    type = a.type;
+                else
+                    type = a.type + " - State: " + a.mod;
+                toolTip.add(type);
                 drawHoveringText(toolTip, x, y, fontRendererObj);
             } else if (isInBounds(x, y, start + 2, l - 5, start + 40, l + 8)) {
                 List<String> toolTip = new ArrayList<>();
@@ -408,11 +433,6 @@ public class GuiMain extends GuiScreen {
                 else toolTip.add("Unknown");
                 drawHoveringText(toolTip, x, y, fontRendererObj);
             }
-
-            GL11.glPushMatrix();
-            GL11.glDisable(GL11.GL_LIGHTING);
-            GL11.glColor3f(1, 1, 1);
-            GL11.glPopMatrix();
 
             l += 14;
         }
